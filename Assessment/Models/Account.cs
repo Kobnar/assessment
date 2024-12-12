@@ -16,9 +16,6 @@ public class Account
     [BsonElement("username")]
     public required string Username { get; set; }
     
-    [BsonElement("email")]
-    public required string Email { get; set; }
-    
     [BsonElement("groups")]
     public required List<string> Groups { get; set; } = ["users"];
     
@@ -34,13 +31,12 @@ public class Account
     [BsonElement("password_hash")]
     private string? PasswordHash { get; set; }
 
-    public static Account NewAccount(string username, string email, string password)
+    public static Account NewAccount(string username, string password)
     {
         // TODO: Create admin account flow (CLI only)
         Account newAccount = new()
         {
             Username = username,
-            Email = email,
             Groups = ["users"],
             Created = DateTime.Now,
         };

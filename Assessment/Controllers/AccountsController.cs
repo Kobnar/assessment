@@ -24,12 +24,16 @@ public class AccountsController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> SignUp(SignUpForm newAccountData)
     {
+        // TODO: Validate zero-length usernames
+        if (newAccountData.Username.Length == 0)
+            return BadRequest("Username is required");
+        
         // TODO: Make this more efficient (we don't need the entire user doc if it exists)
         var existingUser = await _accountsService.GetByUsernameAsync(newAccountData.Username);
         if (existingUser is not null)
             return Conflict();
         
-        var newAccount = Account.NewAccount(newAccountData.Username, newAccountData.Email, newAccountData.Password);
+        var newAccount = Account.NewAccount(newAccountData.Username, newAccountData.Password);
         await _accountsService.CreateAsync(newAccount);
 
         return CreatedAtAction(nameof(GetAccountDetail), new { userId = newAccount.Id }, newAccount);
@@ -46,6 +50,28 @@ public class AccountsController : ControllerBase
         var account = await _accountsService.GetByIdAsync(userId);
         if (account is null)
             return NotFound();
+        
+        return account;
+    }
+
+    [HttpPut("{userId:length(24)}")]
+    public async Task<ActionResult<Account>> UpdateAccountDetail(string userId, UpdateUserForm updateAccountData)
+    {
+        // TODO: Create some kind of access policy
+        var claimedId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (claimedId != userId)
+            return Unauthorized();
+        
+        var account = await _accountsService.GetByIdAsync(userId);
+        if (account is null)
+            return NotFound();
+
+        if (updateAccountData.Username is not null)
+        {
+            if (updateAccountData.Username.Length == 0)
+                return BadRequest("Username cannot be empty");
+            account.Username = updateAccountData.Username;
+        }
         
         return account;
     }
