@@ -5,14 +5,17 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Assessment.Models;
 
-public class AUser
+public class Account
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
     
+    // TODO: Must be unique
     [BsonElement("username")]
     public required string Username { get; set; }
+    
+    // TODO: Create email (must be unique)
     
     [BsonElement("groups")]
     public required List<string> Groups { get; set; } = ["users"];
@@ -26,16 +29,16 @@ public class AUser
     [BsonElement("password_hash")]
     private string? PasswordHash { get; set; }
 
-    public static AUser NewUser(string username, string password)
+    public static Account NewAccount(string username, string password)
     {
-        AUser newAUser = new()
+        Account newAccount = new()
         {
             Username = username,
             Groups = ["users"],
             CreatedAt = DateTime.Now
         };
-        newAUser.SetPassword(password);
-        return newAUser;
+        newAccount.SetPassword(password);
+        return newAccount;
     }
 
     public void SetPassword(string newPassword)

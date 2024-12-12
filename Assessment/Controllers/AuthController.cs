@@ -8,19 +8,19 @@ namespace Assessment.Controllers;
 
 [ApiController]
 [Route("/auth")]
-public class AAuthenticationController : ControllerBase
+public class AuthController : ControllerBase
 {
-    private readonly AAuthService _authService;
-    private readonly AUsersService _usersService;
+    private readonly AuthService _authService;
+    private readonly AccountsService _usersService;
 
-    public AAuthenticationController(AAuthService authService, AUsersService usersService)
+    public AuthController(AuthService authService, AccountsService usersService)
     {
         _authService = authService;
         _usersService = usersService;
     }
     
     [HttpPost]
-    public async Task<IActionResult> LogIn(AAuthForm authData)
+    public async Task<IActionResult> LogIn(LogInForm authData)
     {
         var user = await _usersService.GetByUsernameAsync(authData.Username);
         

@@ -8,17 +8,17 @@ using Assessment.Models;
 
 namespace Assessment.Services;
 
-public class AAuthService
+public class AuthService
 {
     
-    private readonly AAuthSettings _authSettings;
+    private readonly AuthSettings _authSettings;
 
-    public AAuthService(IOptions<AAuthSettings> jwtSettings)
+    public AuthService(IOptions<AuthSettings> jwtSettings)
     {
         _authSettings = jwtSettings.Value;
     }
 
-    public string GenerateToken(AUser user)
+    public string GenerateToken(Account user)
     {
         var claims = new[]
         {

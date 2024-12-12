@@ -12,17 +12,17 @@ var builder = WebApplication.CreateBuilder(args);
 // See: https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-9.0&tabs=visual-studio
 
 // Configure MongoDB
-builder.Services.Configure<AssessmentDatabaseSettings>(builder.Configuration.GetSection("AssessmentDatabase"));
+builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("Database"));
 builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
 {
-    var settings = serviceProvider.GetRequiredService<IOptions<AssessmentDatabaseSettings>>().Value;
+    var settings = serviceProvider.GetRequiredService<IOptions<DatabaseSettings>>().Value;
     return new MongoClient(settings.ConnectionString); // Create the MongoDB client
 });
-builder.Services.AddSingleton<AUsersService>();
+builder.Services.AddSingleton<AccountsService>();
 
 // Configure JWT Authentication
-builder.Services.Configure<AAuthSettings>(builder.Configuration.GetSection("AuthSettings"));
-builder.Services.AddSingleton<AAuthService>();
+builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("Authentication"));
+builder.Services.AddSingleton<AuthService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -31,9 +31,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
-            ValidIssuer = builder.Configuration["AuthSettings:Issuer"],
-            ValidAudience = builder.Configuration["AuthSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings:SecretKey"])),
+            ValidIssuer = builder.Configuration["Authentication:Issuer"],
+            ValidAudience = builder.Configuration["Authentication:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:SecretKey"])),
             RoleClaimType = "groups",
         };
     });

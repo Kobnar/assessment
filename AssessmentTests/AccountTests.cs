@@ -2,7 +2,7 @@ using Assessment.Models;
 
 namespace AssessmentTests;
 
-public class AUserTests
+public class AccountTests
 {
     [SetUp]
     public void Setup()

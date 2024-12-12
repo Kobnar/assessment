@@ -1,6 +1,6 @@
 namespace Assessment.Models;
 
-public class AAuthSettings
+public class AuthSettings
 {
     public string SecretKey { get; set; }
     public string Issuer { get; set; }
