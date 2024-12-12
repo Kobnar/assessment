@@ -1,0 +1,6 @@
+﻿services:
+  assessment:
+    image: assessment
+    build:
+      context: .
+      dockerfile: Assessment/Dockerfile
