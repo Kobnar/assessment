@@ -22,8 +22,11 @@ public class Account
     [BsonElement("groups")]
     public required List<string> Groups { get; set; } = ["users"];
     
-    [BsonElement("created_at")]
-    public required DateTime CreatedAt { get; set; }
+    [BsonElement("created")]
+    public required DateTime Created { get; set; }
+    
+    [BsonElement("last_login")]
+    public DateTime? LastLogin { get; set; }
     
     [BsonElement("password_salt")]
     private string? PasswordSalt { get; set; }
@@ -39,7 +42,7 @@ public class Account
             Username = username,
             Email = email,
             Groups = ["users"],
-            CreatedAt = DateTime.Now
+            Created = DateTime.Now,
         };
         newAccount.SetPassword(password);
         return newAccount;
