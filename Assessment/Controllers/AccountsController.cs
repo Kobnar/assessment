@@ -24,9 +24,12 @@ public class AccountsController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> SignUp(SignUpForm newAccountData)
     {
-        // TODO: Check if account already exists
+        // TODO: Make this more efficient (we don't need the entire user doc if it exists)
+        var existingUser = await _accountsService.GetByUsernameAsync(newAccountData.Username);
+        if (existingUser is not null)
+            return Conflict();
         
-        var newAccount = Account.NewAccount(newAccountData.Username, newAccountData.Password);
+        var newAccount = Account.NewAccount(newAccountData.Username, newAccountData.Email, newAccountData.Password);
         await _accountsService.CreateAsync(newAccount);
 
         return CreatedAtAction(nameof(GetAccountDetail), new { userId = newAccount.Id }, newAccount);
