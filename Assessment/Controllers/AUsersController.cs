@@ -1,26 +1,28 @@
 using Assessment.Forms;
 using Assessment.Models;
 using Assessment.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Assessment.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("/users")]
 public class AUsersController : ControllerBase
 {
-    private readonly AUsersService _aUsersService;
+    private readonly AUsersService _usersService;
 
-    public AUsersController(AUsersService aUsersService)
+    public AUsersController(AUsersService usersService)
     {
-        _aUsersService = aUsersService;
+        _usersService = usersService;
     }
 
     [HttpPost]
     public async Task<IActionResult> Post(ANewUserForm newUserData)
     {
         var newUser = AUser.NewUser(newUserData.Username, newUserData.Password);
-        await _aUsersService.CreateAsync(newUser);
+        await _usersService.CreateAsync(newUser);
 
         return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
     }
@@ -28,7 +30,7 @@ public class AUsersController : ControllerBase
     [HttpGet("{id:length(24)}")]
     public async Task<ActionResult<AUser>> Get(string id)
     {
-        var user = await _aUsersService.GetAsync(id);
+        var user = await _usersService.GetAsync(id);
         if (user is null)
             return NotFound();
         return user;
@@ -37,7 +39,7 @@ public class AUsersController : ControllerBase
     [HttpPost("{id:length(24)}/verify")]
     public async Task<ActionResult<AUser>> VerifyPassword(string id, [FromBody] ANewUserForm newUserData)
     {
-        var user = await _aUsersService.GetAsync(id);
+        var user = await _usersService.GetAsync(id);
         if (user is null)
             return NotFound();
         if (!user.VerifyPassword(newUserData.Password))
