@@ -2,5 +2,7 @@ namespace Assessment.Forms;
 
 public class SetPasswordForm
 {
-    public required string Password { get; set; }
+    public required string OldPassword { get; set; }
+    
+    public required string NewPassword { get; set; }
 }

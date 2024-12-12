@@ -62,7 +62,10 @@ public class AccountsController : ControllerBase
         if (account is null)
             return NotFound();
         
-        account.SetPassword(newPasswordData.Password);
+        if (!account.VerifyPassword(newPasswordData.OldPassword))
+            return Unauthorized();
+        
+        account.SetPassword(newPasswordData.NewPassword);
         await _accountsService.UpdateAsync(account);
         
         return NoContent();
