@@ -21,8 +21,8 @@ builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
 builder.Services.AddSingleton<AUsersService>();
 
 // Configure JWT Authentication
-builder.Services.Configure<AJwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-builder.Services.AddSingleton<AJwtService>();
+builder.Services.Configure<AAuthSettings>(builder.Configuration.GetSection("AuthSettings"));
+builder.Services.AddSingleton<AAuthService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -31,9 +31,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
-            ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-            ValidAudience = builder.Configuration["JwtSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
+            ValidIssuer = builder.Configuration["AuthSettings:Issuer"],
+            ValidAudience = builder.Configuration["AuthSettings:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings:SecretKey"])),
+            RoleClaimType = "groups",
         };
     });
 

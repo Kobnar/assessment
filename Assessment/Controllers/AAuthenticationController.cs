@@ -10,17 +10,17 @@ namespace Assessment.Controllers;
 [Route("/auth")]
 public class AAuthenticationController : ControllerBase
 {
-    private readonly AJwtService _jwtService;
+    private readonly AAuthService _authService;
     private readonly AUsersService _usersService;
 
-    public AAuthenticationController(AJwtService jwtService, AUsersService usersService)
+    public AAuthenticationController(AAuthService authService, AUsersService usersService)
     {
-        _jwtService = jwtService;
+        _authService = authService;
         _usersService = usersService;
     }
     
     [HttpPost]
-    public async Task<IActionResult> Post(AAuthenticationForm authData)
+    public async Task<IActionResult> LogIn(AAuthForm authData)
     {
         var user = await _usersService.GetByUsernameAsync(authData.Username);
         
@@ -30,7 +30,7 @@ public class AAuthenticationController : ControllerBase
         else if (!user.VerifyPassword(authData.Password))
             return Unauthorized();
         
-        var token = _jwtService.GenerateToken(user);
+        var token = _authService.GenerateToken(user);
         return Ok(new { token = token });
     }
 }

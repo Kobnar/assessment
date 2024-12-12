@@ -14,6 +14,9 @@ public class AUser
     [BsonElement("username")]
     public required string Username { get; set; }
     
+    [BsonElement("groups")]
+    public required List<string> Groups { get; set; } = ["users"];
+    
     [BsonElement("created_at")]
     public required DateTime CreatedAt { get; set; }
     
@@ -28,6 +31,7 @@ public class AUser
         AUser newAUser = new()
         {
             Username = username,
+            Groups = ["users"],
             CreatedAt = DateTime.Now
         };
         newAUser.SetPassword(password);

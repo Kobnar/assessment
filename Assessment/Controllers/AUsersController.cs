@@ -1,3 +1,5 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Assessment.Forms;
 using Assessment.Models;
 using Assessment.Services;
@@ -19,31 +21,26 @@ public class AUsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(ANewUserForm newUserData)
+    [AllowAnonymous]
+    public async Task<IActionResult> SignUp(ANewUserForm newUserData)
     {
         var newUser = AUser.NewUser(newUserData.Username, newUserData.Password);
         await _usersService.CreateAsync(newUser);
 
-        return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
+        return CreatedAtAction(nameof(GetAccountDetail), new { id = newUser.Id }, newUser);
     }
 
-    [HttpGet("{id:length(24)}")]
-    public async Task<ActionResult<AUser>> Get(string id)
+    [HttpGet("{userId:length(24)}")]
+    public async Task<ActionResult<AUser>> GetAccountDetail(string userId)
     {
-        var user = await _usersService.GetAsync(id);
+        // TODO: Create some kind of access policy
+        var claimedId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (claimedId != userId)
+            return Unauthorized();
+        
+        var user = await _usersService.GetByIdAsync(userId);
         if (user is null)
             return NotFound();
-        return user;
-    }
-    
-    [HttpPost("{id:length(24)}/verify")]
-    public async Task<ActionResult<AUser>> VerifyPassword(string id, [FromBody] ANewUserForm newUserData)
-    {
-        var user = await _usersService.GetAsync(id);
-        if (user is null)
-            return NotFound();
-        if (!user.VerifyPassword(newUserData.Password))
-            return BadRequest();
         return user;
     }
 }

@@ -8,14 +8,14 @@ using Assessment.Models;
 
 namespace Assessment.Services;
 
-public class AJwtService
+public class AAuthService
 {
     
-    private readonly AJwtSettings _jwtSettings;
+    private readonly AAuthSettings _authSettings;
 
-    public AJwtService(IOptions<AJwtSettings> jwtSettings)
+    public AAuthService(IOptions<AAuthSettings> jwtSettings)
     {
-        _jwtSettings = jwtSettings.Value;
+        _authSettings = jwtSettings.Value;
     }
 
     public string GenerateToken(AUser user)
@@ -23,17 +23,18 @@ public class AJwtService
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+            new Claim("groups", String.Join(",", user.Groups))
             // new Claim(ClaimTypes.Email, user.Email),
             // Add any additional claims here
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authSettings.SecretKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(
-            _jwtSettings.Issuer,
-            _jwtSettings.Audience,
+            _authSettings.Issuer,
+            _authSettings.Audience,
             claims,
-            expires: DateTime.Now.AddMinutes(_jwtSettings.ExpirationMinutes),
+            expires: DateTime.Now.AddMinutes(_authSettings.ExpirationMinutes),
             signingCredentials: credentials
         );
 
@@ -42,7 +43,7 @@ public class AJwtService
 
     public ClaimsPrincipal ValidateToken(string token)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authSettings.SecretKey));
         var tokenHandler = new JwtSecurityTokenHandler();
 
         try
@@ -52,8 +53,8 @@ public class AJwtService
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,
-                ValidIssuer = _jwtSettings.Issuer,
-                ValidAudience = _jwtSettings.Audience,
+                ValidIssuer = _authSettings.Issuer,
+                ValidAudience = _authSettings.Audience,
                 IssuerSigningKey = key
             }, out var validatedToken);
 

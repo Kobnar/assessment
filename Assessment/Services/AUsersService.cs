@@ -17,7 +17,7 @@ public class AUsersService
             settings.Value.UsersCollectionName);
     }
     
-    public async Task<AUser?> GetAsync(string id) => await _usersCollection.Find(u => u.Id == id).FirstOrDefaultAsync();
+    public async Task<AUser?> GetByIdAsync(string id) => await _usersCollection.Find(u => u.Id == id).FirstOrDefaultAsync();
     
     public async Task<AUser?> GetByUsernameAsync(string username) => await _usersCollection.Find(u => u.Username == username).FirstOrDefaultAsync();
     
