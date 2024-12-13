@@ -73,6 +73,8 @@ public class AccountsController : ControllerBase
             account.Username = updateAccountData.Username;
         }
         
+        await _accountsService.UpdateAsync(account);
+        
         return account;
     }
 
