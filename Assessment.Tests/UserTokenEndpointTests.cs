@@ -1,15 +1,6 @@
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Security.Claims;
 using System.Text;
 using Assessment.Models;
 using Assessment.Services;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace Assessment.Tests;
 

@@ -1,13 +1,10 @@
-using System.Security.Claims;
 using Assessment.Forms;
-using Assessment.Models;
 using Assessment.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Assessment.Controllers;
 
-[Authorize]
 [ApiController]
 [Route("account/token")]
 public class UserTokenController : ControllerBase
@@ -22,7 +19,6 @@ public class UserTokenController : ControllerBase
     }
     
     [HttpPost]
-    [AllowAnonymous]
     public async Task<IActionResult> LogIn(LogInForm authData)
     {
         // Query the user based on provided username
