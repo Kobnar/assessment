@@ -13,7 +13,7 @@ using MongoDB.Driver;
 namespace Assessment.Tests;
 
 [TestFixture]
-public class AccountEndpointTests
+public class AdminAccountsEndpointTests
 {
     private CustomWebApplicationFactory<Program> _factory;
     private HttpClient _client;

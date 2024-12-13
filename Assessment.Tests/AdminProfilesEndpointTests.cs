@@ -12,7 +12,7 @@ using MongoDB.Driver;
 namespace Assessment.Tests;
 
 [TestFixture]
-public class ProfileEndpointTests
+public class AdminProfilesEndpointTests
 {
     
 }
