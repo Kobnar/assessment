@@ -36,11 +36,11 @@ public class UserAccountController : ControllerBase
         var newAccount = Account.NewAccount(newAccountData.Username, newAccountData.Email, newAccountData.Password);
         await _accountsService.CreateAsync(newAccount);
 
-        return CreatedAtAction(nameof(GetAccountDetail), new { userId = newAccount.Id }, newAccount);
+        return CreatedAtAction(nameof(ViewAccountDetail), new { userId = newAccount.Id }, newAccount);
     }
 
     [HttpGet]
-    public async Task<ActionResult<Account>> GetAccountDetail()
+    public async Task<ActionResult<Account>> ViewAccountDetail()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userId is null)
@@ -51,5 +51,53 @@ public class UserAccountController : ControllerBase
             return NotFound();
         
         return account;
+    }
+
+    [HttpPatch]
+    public async Task<ActionResult<Account>> ModifyAccountDetail(UpdateUserForm updatedAccountData)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId is null)
+            return NotFound();
+        
+        var account = await _accountsService.GetByIdAsync(userId);
+        if (account is null)
+            return NotFound();
+        
+        if (updatedAccountData.Username is not null)
+            account.Username = updatedAccountData.Username;
+        
+        if (updatedAccountData.Email is not null)
+            account.Email = updatedAccountData.Email;
+        
+        // Update and refresh record
+        await _accountsService.UpdateAsync(account);
+        account = await _accountsService.GetByIdAsync(userId);
+        
+        // TODO: Handle the case or return meaningful error
+        if (account is null)
+            return Conflict();
+
+        return account;
+    }
+
+    [HttpPut("password")]
+    public async Task<IActionResult> SetPassword(SetPasswordForm setPasswordData)
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId is null)
+            return NotFound();
+
+        var account = await _accountsService.GetByIdAsync(userId);
+        if (account is null)
+            return NotFound();
+
+        if (!account.VerifyPassword(setPasswordData.OldPassword))
+            return Unauthorized();
+
+        account.SetPassword(setPasswordData.NewPassword);
+        await _accountsService.UpdateAsync(account);
+
+        return NoContent();
     }
 }

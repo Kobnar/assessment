@@ -76,25 +76,4 @@ public class AdminAccountsController : ControllerBase
         
         return account;
     }
-
-    [HttpPost("{userId:length(24)}/password")]
-    public async Task<IActionResult> SetPassword(string userId, SetPasswordForm newPasswordData)
-    {
-        // TODO: Create some kind of access policy
-        var claimedId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (claimedId != userId)
-            return Unauthorized();
-        
-        var account = await _accountsService.GetByIdAsync(userId);
-        if (account is null)
-            return NotFound();
-        
-        if (!account.VerifyPassword(newPasswordData.OldPassword))
-            return Unauthorized();
-        
-        account.SetPassword(newPasswordData.NewPassword);
-        await _accountsService.UpdateAsync(account);
-        
-        return NoContent();
-    }
 }
