@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		compose.yaml = compose.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssessmentTests", "AssessmentTests\AssessmentTests.csproj", "{34F2714B-407A-4D21-ABAF-1B3C028D9FB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assessment.Tests", "Assessment.Tests\Assessment.Tests.csproj", "{34F2714B-407A-4D21-ABAF-1B3C028D9FB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

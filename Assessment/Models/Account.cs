@@ -6,6 +6,13 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Assessment.Models;
 
+enum AccountStatus
+{
+    Onboarding,
+    Active,
+    Deleted
+};
+
 public class Account
 {
     [BsonId]
