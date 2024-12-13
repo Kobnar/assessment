@@ -9,12 +9,12 @@ namespace Assessment.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("[controller]")]
-public class ProfilesController : ControllerBase
+[Route("admin/profiles")]
+public class AdminProfilesController : ControllerBase
 {
     private readonly ProfilesService _profilesService;
 
-    public ProfilesController(ProfilesService profilesService)
+    public AdminProfilesController(ProfilesService profilesService)
     {
         _profilesService = profilesService;
     }
