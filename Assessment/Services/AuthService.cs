@@ -19,12 +19,15 @@ public class AuthService
         _authSettings = jwtSettings.Value;
     }
 
-    public string GenerateToken(Account user)
+    public string GenerateToken(Account userAccount)
     {
+        if (userAccount.Id is null)
+            return string.Empty;
+        
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-            new Claim("groups", String.Join(",", user.Groups))
+            new Claim(JwtRegisteredClaimNames.Sub, userAccount.Id),
+            new Claim("groups", String.Join(",", userAccount.Groups))
             // new Claim(ClaimTypes.Email, user.Email),
             // Add any additional claims here
         };
@@ -42,7 +45,7 @@ public class AuthService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public ClaimsPrincipal ValidateToken(string token)
+    public ClaimsPrincipal? ValidateToken(string token)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authSettings.SecretKey));
         var tokenHandler = new JwtSecurityTokenHandler();
