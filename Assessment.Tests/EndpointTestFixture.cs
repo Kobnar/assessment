@@ -25,7 +25,7 @@ public class EndpointTestFixture
         _database.DropCollection(name);
     }
 
-    protected void GetCollection<T>(string name)
+    protected IMongoCollection<T> GetCollection<T>(string name)
     {
         _database.GetCollection<T>(name);
     }
