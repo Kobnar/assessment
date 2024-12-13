@@ -19,4 +19,37 @@ public class UserAccountController : ControllerBase
         _accountsService = accountsService;
     }
 
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> SignUp(SignUpForm newAccountData)
+    {
+        // TODO: Make this more efficient (we don't need the entire user doc if it exists)
+        Account? existingAccount = await _accountsService.GetByUsernameAsync(newAccountData.Username);
+        if (existingAccount is not null)
+            return Conflict();
+        
+        // TODO: Make this more efficient (we don't need the entire user doc if it exists)
+        existingAccount = await _accountsService.GetByEmailAsync(newAccountData.Email);
+        if (existingAccount is not null)
+            return Conflict();
+        
+        var newAccount = Account.NewAccount(newAccountData.Username, newAccountData.Email, newAccountData.Password);
+        await _accountsService.CreateAsync(newAccount);
+
+        return CreatedAtAction(nameof(GetAccountDetail), new { userId = newAccount.Id }, newAccount);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<Account>> GetAccountDetail()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId is null)
+            return NotFound();
+        
+        var account = await _accountsService.GetByIdAsync(userId);
+        if (account is null)
+            return NotFound();
+        
+        return account;
+    }
 }

@@ -56,7 +56,7 @@ public class AccountEndpointTests
     public async Task LogIn_WithValidCredentials_ReturnsCreated()
     {
         // Create new account
-        Account account = Account.NewAccount("test_user", "test_password");
+        Account account = Account.NewAccount("test_user", "test@email.com", "test_password");
         await _accountsService.CreateAsync(account);
         
         // Submit login request

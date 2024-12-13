@@ -13,14 +13,14 @@ public class UserTokenEndpointTests : EndpointTestFixture
     public void Setup()
     {
         _accountsService = GetService<AccountsService>();
-        DropCollection("Accounts");
+        DropCollection("Accounts"); // TODO: Use settings for string
     }
 
     [Test]
     public async Task LogIn_WithValidCredentials_UpdatesLastLoggedInAndReturnsJwt()
     {
         // Create new account
-        Account newAccount = Account.NewAccount("test_user", "test_password");
+        Account newAccount = Account.NewAccount("test_user", "test@email.com", "test_password");
         await _accountsService.CreateAsync(newAccount);
         
         // Compile login request
@@ -54,7 +54,7 @@ public class UserTokenEndpointTests : EndpointTestFixture
     public async Task LogIn_WithInvalidCredentials_ReturnsUnauthorized()
     {
         // Create new account
-        Account account = Account.NewAccount("test_user", "test_password");
+        Account account = Account.NewAccount("test_user", "test@email.com", "test_password");
         await _accountsService.CreateAsync(account);
         
         // Compile login request
@@ -71,7 +71,7 @@ public class UserTokenEndpointTests : EndpointTestFixture
     public async Task LogIn_WithUnknownUsername_ReturnsUnauthorized()
     {
         // Create new account
-        Account account = Account.NewAccount("test_user", "test_password");
+        Account account = Account.NewAccount("test_user", "test@email.com", "test_password");
         await _accountsService.CreateAsync(account);
         
         // Compile login request

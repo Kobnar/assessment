@@ -32,7 +32,7 @@ public class AccountsController : ControllerBase
         if (existingUser is not null)
             return Conflict();
         
-        var newAccount = Account.NewAccount(newAccountData.Username, newAccountData.Password);
+        var newAccount = Account.NewAccount(newAccountData.Username, newAccountData.Email, newAccountData.Password);
         await _accountsService.CreateAsync(newAccount);
 
         return CreatedAtAction(nameof(GetAccountDetail), new { userId = newAccount.Id }, newAccount);
