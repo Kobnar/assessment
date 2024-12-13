@@ -64,11 +64,24 @@ public class UserAccountController : ControllerBase
         if (account is null)
             return NotFound();
         
+        // Enforce uniqueness with username and email
+        Account? existingAccount;
         if (updatedAccountData.Username is not null)
+        {
+            existingAccount = await _accountsService.GetByUsernameAsync(updatedAccountData.Username);
+            if (existingAccount is not null)
+                return Conflict();
+            
             account.Username = updatedAccountData.Username;
-        
+        }
         if (updatedAccountData.Email is not null)
+        {
+            existingAccount = await _accountsService.GetByEmailAsync(updatedAccountData.Email);
+            if (existingAccount is not null)
+                return Conflict();
+            
             account.Email = updatedAccountData.Email;
+        }
         
         // Update and refresh record
         await _accountsService.UpdateAsync(account);
