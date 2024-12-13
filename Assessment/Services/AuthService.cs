@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 
 using Assessment.Models;
+using Assessment.Settings;
 
 namespace Assessment.Services;
 

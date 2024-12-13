@@ -1,4 +1,5 @@
 using Assessment.Models;
+using Assessment.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 

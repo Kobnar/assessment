@@ -1,6 +1,7 @@
 using System.Text;
 using Assessment.Models;
 using Assessment.Services;
+using Assessment.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -19,6 +20,7 @@ builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
     return new MongoClient(settings.ConnectionString); // Create the MongoDB client
 });
 builder.Services.AddSingleton<AccountsService>();
+builder.Services.AddSingleton<ProfilesService>();
 
 // Configure JWT Authentication
 builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("Authentication"));

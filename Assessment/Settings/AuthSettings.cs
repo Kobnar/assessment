@@ -1,4 +1,4 @@
-namespace Assessment.Models;
+namespace Assessment.Settings;
 
 public class AuthSettings
 {
