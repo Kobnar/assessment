@@ -15,7 +15,7 @@ public class EndpointTestFixture
     protected HttpClient Client;
     protected AuthService AuthService;
     
-    protected T GetService<T>()
+    protected T GetService<T>() where T : notnull
     {
         return _factory.GetService<T>();
     }
@@ -27,7 +27,7 @@ public class EndpointTestFixture
 
     protected IMongoCollection<T> GetCollection<T>(string name)
     {
-        _database.GetCollection<T>(name);
+        return _database.GetCollection<T>(name);
     }
     
     [SetUp]
