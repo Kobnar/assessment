@@ -27,7 +27,7 @@ public class AuthService
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, userAccount.Id),
-            // new Claim(JwtRegisteredClaimNames.Email, userAccount.Email),
+            new Claim(JwtRegisteredClaimNames.Email, userAccount.Email),
             new Claim("scope", userAccount.IsAdmin ? "admin" : "user"),
         };
 

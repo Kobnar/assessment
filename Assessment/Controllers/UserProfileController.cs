@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Assessment.Forms;
 using Assessment.Models;
@@ -12,24 +13,19 @@ namespace Assessment.Controllers;
 [Route("profile")]
 public class UserProfileController : ControllerBase
 {
-    private readonly AccountsService _accountsService;
     private readonly ProfilesService _profilesService;
 
     public UserProfileController(AccountsService accountsService, ProfilesService profilesService)
     {
-        _accountsService = accountsService;
         _profilesService = profilesService;
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateProfile(CreateProfileForm newProfileData)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId is null)
-            return NotFound();
-        
-        Account? account = await _accountsService.GetByIdAsync(userId);
-        if (account is null)
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        string? userEmail = User.FindFirstValue(ClaimTypes.Email);
+        if (userId is null || userEmail is null)
             return NotFound();
 
         Profile? existingProfile = await _profilesService.GetByIdAsync(userId);
@@ -37,7 +33,7 @@ public class UserProfileController : ControllerBase
             return Conflict();
         
         var newProfile = Profile.NewProfile(
-            account.Email, newProfileData.Name, newProfileData.PhoneNumber, newProfileData.Address, userId);
+            userEmail, newProfileData.Name, newProfileData.PhoneNumber, newProfileData.Address, userId);
         await _profilesService.CreateAsync(newProfile);
 
         return CreatedAtAction(nameof(ViewProfileDetail), new { userId = newProfile.Id }, newProfile);
