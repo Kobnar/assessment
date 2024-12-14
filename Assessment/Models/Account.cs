@@ -24,17 +24,17 @@ public class Account
     [BsonElement("created")]
     public required DateTime Created { get; set; }
     
-    [BsonElement("last_login")]
+    [BsonElement("lastLogin")]
     public DateTime? LastLogin { get; set; }
     
-    [BsonElement("password_salt")]
+    [BsonElement("passwordSalt")]
     private string? PasswordSalt { get; set; }
     
-    [BsonElement("password_hash")]
+    [BsonElement("passwordHash")]
     private string? PasswordHash { get; set; }
     
     [JsonIgnore]
-    [BsonElement("is_admin")]
+    [BsonElement("isAdmin")]
     public bool IsAdmin { get; set; }
 
     public static Account NewAccount(string username, string email, string password, bool isAdmin = false)

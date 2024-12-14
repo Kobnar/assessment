@@ -1,24 +1,25 @@
+using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Assessment.Models;
 
 public class Address
 {
-    [BsonElement]
+    [BsonElement("line1")]
     public string Line1 { get; set; }
     
-    [BsonElement]
-    public string Line2 { get; set; }
+    [BsonElement("line2")]
+    public string? Line2 { get; set; }
     
-    [BsonElement]
+    [BsonElement("city")]
     public string City { get; set; }
     
-    [BsonElement]
+    [BsonElement("state")]
     public string State { get; set; }
     
-    [BsonElement]
+    [BsonElement("country")]
     public string Country { get; set; }
     
-    [BsonElement]
+    [BsonElement("postalCode")]
     public string PostalCode { get; set; }
 }

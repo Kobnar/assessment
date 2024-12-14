@@ -15,7 +15,7 @@ public class Profile
     [BsonElement("name")]
     public required Name Name { get; set; }
     
-    [BsonElement("phone_number")]
+    [BsonElement("phoneNumber")]
     public required string PhoneNumber { get; set; }
     
     [BsonElement("address")]

@@ -8,10 +8,10 @@ public class Name
     public required string First { get; set; }
 
     [BsonElement("middle")]
-    public required string Middle { get; set; } = "";
+    public string? Middle { get; set; }
     
     [BsonElement("last")]
     public required string Last { get; set; }
 
-    public string Full => Middle == "" ? $"{First} {Last}" : $"{First} {Middle} {Last}";
+    public string Full => Middle == null ? $"{First} {Last}" : $"{First} {Middle} {Last}";
 }
