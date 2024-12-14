@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Assessment.Controllers;
 
+/// <summary>
+/// A controller for a user to manage their own profile. Provides methods to create a profile, view and modify
+/// details about their profile, and delete their profile.
+/// </summary>
 [Authorize]
 [ApiController]
 [Route("profile")]

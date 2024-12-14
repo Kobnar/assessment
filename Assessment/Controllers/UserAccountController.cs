@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Assessment.Controllers;
 
+/// <summary>
+/// A controller for a user to manage their own account. Provides methods to sign up, view their account, modify
+/// details about their account (including change password), and delete their account.
+/// </summary>
 [Authorize]
 [ApiController]
 [Route("account")]

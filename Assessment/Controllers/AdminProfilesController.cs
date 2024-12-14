@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Assessment.Controllers;
 
+/// <summary>
+/// A controller for administrators to manage user profiles. Provides methods to query profiles,
+/// review specific details about a profile, modify a profile, and delete a profile.
+/// </summary>
 [Authorize]
 [ApiController]
 [Route("admin/profiles")]

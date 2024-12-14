@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Assessment.Controllers;
 
+/// <summary>
+/// A controller for administrators to manage (mostly view) user accounts. Provides methods to query accounts,
+/// review specific details about an account, and delete an account.
+/// </summary>
 [Authorize]
 [ApiController]
 [Route("admin/accounts")]

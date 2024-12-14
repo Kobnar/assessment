@@ -2,7 +2,6 @@ using System.Security.Claims;
 using Assessment.Forms;
 using Assessment.Models;
 using Assessment.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Assessment.Controllers;
