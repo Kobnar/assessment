@@ -31,8 +31,8 @@ public class UserProfileController : ControllerBase
         if (userId is null || userEmail is null)
             return NotFound();
 
-        Profile? existingProfile = await _profilesService.GetByIdAsync(userId);
-        if (existingProfile is not null)
+        long nConflicts = await _profilesService.CountByIdAsync(userId);
+        if (0 < nConflicts)
             return Conflict();
         
         var newProfile = Profile.NewProfile(

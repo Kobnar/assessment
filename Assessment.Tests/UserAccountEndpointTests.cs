@@ -15,7 +15,7 @@ public class UserAccountEndpointTests : EndpointTestFixture
     public void Setup()
     {
         _accountsService = GetService<AccountsService>();
-        DropCollection("Accounts"); // TODO: Use settings for string
+        DropCollection("Accounts");
     }
 
     [Test]

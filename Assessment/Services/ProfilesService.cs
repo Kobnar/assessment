@@ -20,7 +20,7 @@ public class ProfilesService
     
     public async Task<Profile?> GetByIdAsync(string id) => await _profilesCollection.Find(p => p.Id == id).FirstOrDefaultAsync();
     
-    public async Task<Profile?> GetByEmailAsync(string email) => await _profilesCollection.Find(p => p.Email == email).FirstOrDefaultAsync();
+    public async Task<long> CountByIdAsync(string id) => await _profilesCollection.CountDocumentsAsync(p => p.Id == id);
     
     public async Task CreateAsync(Profile profile) => await _profilesCollection.InsertOneAsync(profile);
     
