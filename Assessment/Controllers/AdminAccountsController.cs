@@ -51,4 +51,17 @@ public class AdminAccountsController : ControllerBase
         
         return account;
     }
+
+    [HttpDelete("{userId:length(24)}")]
+    public async Task<IActionResult> DeleteAccount(string userId)
+    {
+        // TODO: Create some kind of access policy for this
+        var jwtScope = User.FindFirstValue("scope");
+        if (jwtScope != "admin")
+            return Unauthorized();
+        
+        await _accountsService.DeleteAsync(userId);
+
+        return NoContent();
+    }
 }

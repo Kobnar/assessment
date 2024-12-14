@@ -113,4 +113,16 @@ public class UserAccountController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteAccount()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId is null)
+            return NotFound();
+        
+        await _accountsService.DeleteAsync(userId);
+
+        return NoContent();
+    }
 }
