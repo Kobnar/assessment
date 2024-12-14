@@ -11,7 +11,7 @@ namespace Assessment.Controllers;
 /// A controller for administrators to manage user profiles. Provides methods to query profiles,
 /// review specific details about a profile, modify a profile, and delete a profile.
 /// </summary>
-[Authorize]
+[Authorize(Policy = "AdminScopePolicy")]
 [ApiController]
 [Route("admin/profiles")]
 public class AdminProfilesController : ControllerBase
@@ -26,11 +26,6 @@ public class AdminProfilesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<QueryResult<Profile>>> GetManyProfiles([FromQuery] QueryProfilesForm queryProfilesForm)
     {
-        // TODO: Create some kind of access policy for this
-        var jwtScope = User.FindFirstValue("scope");
-        if (jwtScope != "admin")
-            return Unauthorized();
-        
         QueryResult<Profile> profiles = await _profilesService.GetManyAsync(
             queryProfilesForm.Name,
             queryProfilesForm.Email,
@@ -47,11 +42,6 @@ public class AdminProfilesController : ControllerBase
     [HttpGet("{userId:length(24)}")]
     public async Task<ActionResult<Profile>> GetProfileDetail(string userId)
     {
-        // TODO: Create some kind of access policy for this
-        var jwtScope = User.FindFirstValue("scope");
-        if (jwtScope != "admin")
-            return Unauthorized();
-
         var profile = await _profilesService.GetByIdAsync(userId);
         if (profile is null)
             return NotFound();
@@ -62,11 +52,6 @@ public class AdminProfilesController : ControllerBase
     [HttpDelete("{userId:length(24)}")]
     public async Task<IActionResult> DeleteProfile(string userId)
     {
-        // TODO: Create some kind of access policy for this
-        var jwtScope = User.FindFirstValue("scope");
-        if (jwtScope != "admin")
-            return Unauthorized();
-        
         await _profilesService.DeleteAsync(userId);
 
         return NoContent();

@@ -1,8 +1,10 @@
 using System.Text;
+using Assessment.Authentication;
 using Assessment.Models;
 using Assessment.Services;
 using Assessment.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
@@ -39,6 +41,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             RoleClaimType = "groups",
         };
     });
+
+// Add custom access control policy requirements
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminScopePolicy", policy =>
+        policy.Requirements.Add(new ScopeRequirement("admin")));
+});
+
+// Add custom access control policy handlers
+builder.Services.AddSingleton<IAuthorizationHandler, ScopeRequirementHandler>();
 
 // Add services to the container.
 builder.Services.AddControllers(); // Add support for controllers
