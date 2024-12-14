@@ -19,12 +19,33 @@ public class AdminProfilesController : ControllerBase
         _profilesService = profilesService;
     }
 
+    [HttpGet]
+    public async Task<ActionResult<QueryResult<Profile>>> GetManyProfiles([FromQuery] QueryProfilesForm queryProfilesForm)
+    {
+        // TODO: Create some kind of access policy for this
+        var jwtScope = User.FindFirstValue("scope");
+        if (jwtScope != "admin")
+            return Unauthorized();
+        
+        QueryResult<Profile> profiles = await _profilesService.GetManyAsync(
+            queryProfilesForm.Name,
+            queryProfilesForm.Email,
+            queryProfilesForm.PhoneNumber,
+            queryProfilesForm.CreatedAfter,
+            queryProfilesForm.CreatedBefore,
+            queryProfilesForm.Limit,
+            queryProfilesForm.Skip
+        );
+
+        return profiles;
+    }
+
     [HttpGet("{userId:length(24)}")]
     public async Task<ActionResult<Profile>> GetProfileDetail(string userId)
     {
-        // TODO: Create some kind of access policy
-        var claimedId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (claimedId != userId)
+        // TODO: Create some kind of access policy for this
+        var jwtScope = User.FindFirstValue("scope");
+        if (jwtScope != "admin")
             return Unauthorized();
 
         var profile = await _profilesService.GetByIdAsync(userId);

@@ -40,21 +40,13 @@ public class AccountsService
     )
     {
         // If any query parameters are provided, filter based on them
-        IFindFluent<Account, Account> query;
-        if (username is not null || email is not null || createdAfter is not null || createdBefore is not null)
-        {
-            query = _accountsCollection.Find(
-                a =>
-                    (username == null || a.Username.Contains(username)) &&
-                    (email == null || a.Email.Contains(email)) &&
-                    (createdBefore == null || a.Created < createdBefore) &&
-                    (createdAfter == null || a.Created > createdAfter)
-            );
-        }
-        else
-        {
-            query = _accountsCollection.Find(a => true);
-        }
+        IFindFluent<Account, Account> query = _accountsCollection.Find(
+            a =>
+                (username == null || a.Username.Contains(username)) &&
+                (email == null || a.Email.Contains(email)) &&
+                (createdBefore == null || a.Created < createdBefore) &&
+                (createdAfter == null || a.Created > createdAfter)
+        );
         
         long count = await query.CountDocumentsAsync();
         List<Account> accounts = await query.Limit(limit).Skip(skip).ToListAsync();
