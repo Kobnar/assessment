@@ -47,20 +47,6 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Check MongoDB connection at startup
-var mongoClient = app.Services.GetRequiredService<IMongoClient>();
-try
-{
-    // Try a simple command to check if the connection works
-    var databases = mongoClient.ListDatabases(); // This will throw if the connection fails
-    Console.WriteLine("MongoDB connection successful.");
-}
-catch (Exception ex)
-{
-    // If the connection fails, log the error
-    Console.WriteLine($"MongoDB connection failed: {ex.Message}");
-}
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
