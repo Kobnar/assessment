@@ -54,4 +54,17 @@ public class AdminProfilesController : ControllerBase
 
         return profile;
     }
+
+    [HttpDelete("{userId:length(24)}")]
+    public async Task<IActionResult> DeleteProfile(string userId)
+    {
+        // TODO: Create some kind of access policy for this
+        var jwtScope = User.FindFirstValue("scope");
+        if (jwtScope != "admin")
+            return Unauthorized();
+        
+        await _profilesService.DeleteAsync(userId);
+
+        return NoContent();
+    }
 }
