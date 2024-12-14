@@ -49,15 +49,15 @@ public class AccountsService
                     (email == null || a.Email.Contains(email)) &&
                     (createdBefore == null || a.Created < createdBefore) &&
                     (createdAfter == null || a.Created > createdAfter)
-            ).Limit(limit).Skip(skip);
+            );
         }
         else
         {
-            query = _accountsCollection.Find(a => true).Limit(limit).Skip(skip);
+            query = _accountsCollection.Find(a => true);
         }
         
         long count = await query.CountDocumentsAsync();
-        List<Account> accounts = await query.ToListAsync();
+        List<Account> accounts = await query.Limit(limit).Skip(skip).ToListAsync();
 
         return new QueryResult<Account>()
         {
