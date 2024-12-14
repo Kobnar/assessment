@@ -27,9 +27,8 @@ public class AuthService
         var claims = new[]
         {
             new Claim(JwtRegisteredClaimNames.Sub, userAccount.Id),
-            new Claim("groups", String.Join(",", userAccount.Groups))
-            // new Claim(ClaimTypes.Email, user.Email),
-            // Add any additional claims here
+            // new Claim(JwtRegisteredClaimNames.Email, userAccount.Email),
+            new Claim("scope", userAccount.IsAdmin ? "admin" : "user"),
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authSettings.SecretKey));

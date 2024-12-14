@@ -29,4 +29,28 @@ public class AccountsService
     public async Task<Account?> GetByUsernameAsync(string username) => await _accountsCollection.Find(a => a.Username == username).FirstOrDefaultAsync();
     
     public async Task<Account?> GetByEmailAsync(string email) => await _accountsCollection.Find(a => a.Email == email).FirstOrDefaultAsync();
+
+    public async Task<List<Account>> GetManyAsync(
+        string? username,
+        string? email,
+        DateTime? createdAfter,
+        DateTime? createdBefore
+    )
+    {
+        // If any query parameters are provided, filter based on them
+        if (username is not null || email is not null || createdAfter is not null || createdBefore is not null)
+        {
+            return await _accountsCollection.Find(
+                a => 
+                    (username == null || a.Username.Contains(username)) &&
+                    (email == null || a.Email.Contains(email)) &&
+                    (createdBefore == null || a.Created < createdBefore) &&
+                    (createdAfter == null || a.Created > createdAfter)
+            ).ToListAsync();
+        }
+        
+        // Otherwise, dump whole the DB baby!
+        // TODO: Handle pagination
+        return await _accountsCollection.Find(a => true).ToListAsync();
+    }
 }

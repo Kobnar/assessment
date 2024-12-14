@@ -19,23 +19,22 @@ public class AdminAccountsController : ControllerBase
         _accountsService = accountsService;
     }
 
-    [HttpPost]
-    [AllowAnonymous]
-    public async Task<IActionResult> SignUp(SignUpForm newAccountData)
+    [HttpGet]
+    public async Task<ActionResult<List<Account>>> GetManyAccounts([FromQuery] QueryAccountsForm queryAccountsForm)
     {
-        // TODO: Validate zero-length usernames
-        if (newAccountData.Username.Length == 0)
-            return BadRequest("Username is required");
+        // TODO: Create some kind of access policy for this
+        var jwtScope = User.FindFirstValue("scope");
+        if (jwtScope != "admin")
+            return Unauthorized();
         
-        // TODO: Make this more efficient (we don't need the entire user doc if it exists)
-        var existingUser = await _accountsService.GetByUsernameAsync(newAccountData.Username);
-        if (existingUser is not null)
-            return Conflict();
-        
-        var newAccount = Account.NewAccount(newAccountData.Username, newAccountData.Email, newAccountData.Password);
-        await _accountsService.CreateAsync(newAccount);
+        List<Account> accounts = await _accountsService.GetManyAsync(
+            queryAccountsForm.Username,
+            queryAccountsForm.Email,
+            queryAccountsForm.CreatedAfter,
+            queryAccountsForm.CreatedBefore
+            );
 
-        return CreatedAtAction(nameof(GetAccountDetail), new { userId = newAccount.Id }, newAccount);
+        return accounts;
     }
 
     [HttpGet("{userId:length(24)}")]

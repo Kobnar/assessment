@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json.Serialization;
 using Assessment.Forms;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -32,8 +33,9 @@ public class Account
     [BsonElement("password_hash")]
     private string? PasswordHash { get; set; }
     
+    [JsonIgnore]
     [BsonElement("is_admin")]
-    public required bool IsAdmin { get; set; } = false;
+    public bool IsAdmin { get; set; }
 
     public static Account NewAccount(string username, string email, string password, bool isAdmin = false)
     {
