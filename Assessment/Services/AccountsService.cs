@@ -30,27 +30,41 @@ public class AccountsService
     
     public async Task<Account?> GetByEmailAsync(string email) => await _accountsCollection.Find(a => a.Email == email).FirstOrDefaultAsync();
 
-    public async Task<List<Account>> GetManyAsync(
+    public async Task<QueryResult<Account>> GetManyAsync(
         string? username,
         string? email,
         DateTime? createdAfter,
-        DateTime? createdBefore
+        DateTime? createdBefore,
+        int limit = 100,
+        int skip = 0
     )
     {
         // If any query parameters are provided, filter based on them
+        IFindFluent<Account, Account> query;
         if (username is not null || email is not null || createdAfter is not null || createdBefore is not null)
         {
-            return await _accountsCollection.Find(
-                a => 
+            query = _accountsCollection.Find(
+                a =>
                     (username == null || a.Username.Contains(username)) &&
                     (email == null || a.Email.Contains(email)) &&
                     (createdBefore == null || a.Created < createdBefore) &&
                     (createdAfter == null || a.Created > createdAfter)
-            ).ToListAsync();
+            ).Limit(limit).Skip(skip);
+        }
+        else
+        {
+            query = _accountsCollection.Find(a => true).Limit(limit).Skip(skip);
         }
         
-        // Otherwise, dump whole the DB baby!
-        // TODO: Handle pagination
-        return await _accountsCollection.Find(a => true).ToListAsync();
+        long count = await query.CountDocumentsAsync();
+        List<Account> accounts = await query.ToListAsync();
+
+        return new QueryResult<Account>()
+        {
+            Limit = limit,
+            Skip = skip,
+            Count = count,
+            Items = accounts
+        };
     }
 }
