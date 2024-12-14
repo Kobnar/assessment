@@ -40,38 +40,14 @@ public class AdminAccountsController : ControllerBase
     [HttpGet("{userId:length(24)}")]
     public async Task<ActionResult<Account>> GetAccountDetail(string userId)
     {
-        // TODO: Create some kind of access policy
-        var claimedId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (claimedId != userId)
+        // TODO: Create some kind of access policy for this
+        var jwtScope = User.FindFirstValue("scope");
+        if (jwtScope != "admin")
             return Unauthorized();
         
         var account = await _accountsService.GetByIdAsync(userId);
         if (account is null)
             return NotFound();
-        
-        return account;
-    }
-
-    [HttpPut("{userId:length(24)}")]
-    public async Task<ActionResult<Account>> UpdateAccountDetail(string userId, UpdateUserForm updateAccountData)
-    {
-        // TODO: Create some kind of access policy
-        var claimedId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (claimedId != userId)
-            return Unauthorized();
-        
-        var account = await _accountsService.GetByIdAsync(userId);
-        if (account is null)
-            return NotFound();
-
-        if (updateAccountData.Username is not null)
-        {
-            if (updateAccountData.Username.Length == 0)
-                return BadRequest("Username cannot be empty");
-            account.Username = updateAccountData.Username;
-        }
-        
-        await _accountsService.UpdateAsync(account);
         
         return account;
     }
