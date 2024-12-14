@@ -7,7 +7,7 @@ public class Profile
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public required string Id { get; set; }
+    public string? Id { get; set; }
     
     [BsonElement("email")]
     public required string Email { get; set; }
@@ -15,9 +15,25 @@ public class Profile
     [BsonElement("name")]
     public required Name Name { get; set; }
     
-    [BsonElement("phone")]
-    public required PhoneNumber PhoneNumber { get; set; }
+    [BsonElement("phone_number")]
+    public required string PhoneNumber { get; set; }
     
     [BsonElement("address")]
     public required Address Address { get; set; }
+    
+    [BsonElement("created")]
+    public required DateTime Created { get; set; }
+
+    public static Profile NewProfile(string email, Name name, string phoneNumber, Address address, string? userId = null)
+    {
+        return new()
+        {
+            Id = userId,
+            Email = email,
+            Name = name,
+            PhoneNumber = phoneNumber,
+            Address = address,
+            Created = DateTime.Now,
+        };
+    }
 }

@@ -6,13 +6,6 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Assessment.Models;
 
-enum AccountStatus
-{
-    Onboarding,
-    Active,
-    Deleted
-};
-
 public class Account
 {
     [BsonId]
@@ -27,9 +20,6 @@ public class Account
     [BsonElement("email")]
     public required string Email { get; set; }
     
-    [BsonElement("groups")]
-    public required List<string> Groups { get; set; } = ["users"];
-    
     [BsonElement("created")]
     public required DateTime Created { get; set; }
     
@@ -41,16 +31,18 @@ public class Account
     
     [BsonElement("password_hash")]
     private string? PasswordHash { get; set; }
+    
+    [BsonElement("is_admin")]
+    public required bool IsAdmin { get; set; } = false;
 
-    public static Account NewAccount(string username, string email, string password)
+    public static Account NewAccount(string username, string email, string password, bool isAdmin = false)
     {
-        // TODO: Create admin account flow (CLI only)
         Account newAccount = new()
         {
             Username = username,
             Email = email,
-            Groups = ["users"],
             Created = DateTime.Now,
+            IsAdmin = isAdmin,
         };
         newAccount.SetPassword(password);
         return newAccount;
