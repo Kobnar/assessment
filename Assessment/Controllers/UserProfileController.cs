@@ -106,4 +106,16 @@ public class UserProfileController : ControllerBase
 
         return profile;
     }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteProfile()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userId is null)
+            return NotFound();
+        
+        await _profilesService.DeleteAsync(userId);
+
+        return NoContent();
+    }
 }
