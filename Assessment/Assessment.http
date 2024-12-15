@@ -1,4 +1,5 @@
 @hostname = http://localhost:5286
+#@hostname = http://localhost:8080
 
 @username = "kludwig"
 @email = "kludwig@test.com"
@@ -34,13 +35,15 @@ Authorization: Bearer {{authToken}}
 
 ### User: Update Account
 @newUsername = "konradludwig"
+@newEmail = "konradrkludwig@test.com"
 
 PATCH {{hostname}}/account
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "username": {{newUsername}}
+  "username": {{newUsername}},
+  "email": {{newEmail}}
 }
 
 ### User: Set password
@@ -55,16 +58,27 @@ Authorization: Bearer {{authToken}}
   "newPassword": {{newPassword}}
 }
 
+### User: Re-authenticate
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": {{newUsername}},
+  "password": {{newPassword}}
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
 ### User: Create profile
 POST {{hostname}}/profile
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "name": {"first": "Konrad", "last": "Ludwig"},
+  "name": {"first": "Konrad", "middle": "Roland", "last": "Ludwig"},
   "phoneNumber": "1234567890",
   "address": {
-    "line1": "1234 Hound Dr.",
+    "line1": "1234 Dogs Dr.",
     "city": "Dogtown",
     "state": "MT",
     "country": "United States",
@@ -85,6 +99,16 @@ Authorization: Bearer {{authToken}}
 {
   "name": {"middle": "Roland"}
 }
+
+### User: Delete profile
+DELETE {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### User: Delete account
+DELETE {{hostname}}/account
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 ### DEMO ONLY: Convert to admin
 POST {{hostname}}/account/token/makeadmin
@@ -133,10 +157,5 @@ Authorization: Bearer {{authToken}}
 
 ### Admin: Delete profile
 DELETE {{hostname}}/admin/profiles/{{userId}}
-Content-Type: application/json
-Authorization: Bearer {{authToken}}
-
-### User: Delete profile
-DELETE {{hostname}}/profile
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
