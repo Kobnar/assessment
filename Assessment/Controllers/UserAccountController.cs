@@ -84,10 +84,8 @@ public class UserAccountController : ControllerBase
         // Update and refresh record
         await _accountsService.UpdateAsync(account);
         account = await _accountsService.GetByIdAsync(userId);
-        
-        // TODO: Handle the case or return meaningful error
         if (account is null)
-            return Conflict();
+            return Problem(); // Not sure what to do in this case
 
         return account;
     }

@@ -5,10 +5,12 @@ namespace Assessment.Models;
 
 public class Profile
 {
+    // TODO: Use DB-level uniqueness constraint
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
     
+    // TODO: Use DB-level uniqueness constraint
     [BsonElement("email")]
     public required string Email { get; set; }
     

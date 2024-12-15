@@ -32,7 +32,9 @@ public class ProfilesService
         string? name,
         string? email,
         string? phoneNumber,
-        // TODO: Add searching by city, state, etc.
+        string? city,
+        string? state,
+        string? postalCode,
         DateTime? createdAfter,
         DateTime? createdBefore,
         int limit = 100,
@@ -42,9 +44,16 @@ public class ProfilesService
         // If any query parameters are provided, filter based on them
         IFindFluent<Profile, Profile> query= _profilesCollection.Find(
             p =>
-                (name == null || p.Name.First.Contains(name) || p.Name.Middle.Contains(name) || p.Name.Last.Contains(name)) &&
-                (email == null || p.Email.Contains(email)) &&
-                (phoneNumber == null || p.PhoneNumber.Contains(phoneNumber)) &&
+                (string.IsNullOrEmpty(name) || (
+                    p.Name.First.Contains(name) || 
+                    (p.Name.Middle != null && p.Name.Middle.Contains(name)) || 
+                    p.Name.Last.Contains(name)
+                    )) &&
+                (string.IsNullOrEmpty(email) || p.Email.Contains(email)) &&
+                (string.IsNullOrEmpty(phoneNumber) || p.PhoneNumber.Contains(phoneNumber)) &&
+                (string.IsNullOrEmpty(city) || p.Address.City.Contains(city)) &&
+                (string.IsNullOrEmpty(state) || p.Address.State.Contains(state)) &&
+                (string.IsNullOrEmpty(postalCode) || p.Address.PostalCode.Contains(postalCode)) &&
                 (createdBefore == null || p.Created < createdBefore) &&
                 (createdAfter == null || p.Created > createdAfter)
         );

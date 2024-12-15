@@ -116,7 +116,7 @@ public class UserAccountEndpointTests : EndpointTestFixture
         await _accountsService.CreateAsync(newAccount);
         
         // Compile login request
-        var text = "{\"username\":\"test_user\",\"email\":\"different@email.com\",\"password\":\"test_password\"}";
+        var text = "{\"username\":\"Test_User\",\"email\":\"different@email.com\",\"password\":\"test_password\"}";
         var content = new StringContent(text, Encoding.UTF8, "application/json");
         
         // Submit login request

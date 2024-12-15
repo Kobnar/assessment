@@ -13,11 +13,11 @@ public class Account
     [BsonRepresentation(BsonType.ObjectId)]
     public string? Id { get; set; }
     
-    // TODO: Must be unique
+    // TODO: Use DB-level uniqueness constraint
     [BsonElement("username")]
     public required string Username { get; set; }
     
-    // TODO: Must be unique
+    // TODO: Use DB-level uniqueness constraint
     [BsonElement("email")]
     public required string Email { get; set; }
     

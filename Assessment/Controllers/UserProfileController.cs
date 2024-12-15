@@ -103,10 +103,8 @@ public class UserProfileController : ControllerBase
         
         await _profilesService.UpdateAsync(profile);
         profile = await _profilesService.GetByIdAsync(userId);
-        
-        // TODO: Handle the case or return meaningful error
         if (profile is null)
-            return Conflict();
+            return Problem(); // Not sure what to do in this case
 
         return profile;
     }
