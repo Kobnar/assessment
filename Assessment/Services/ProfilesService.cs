@@ -18,15 +18,20 @@ public class ProfilesService : IProfilesService
             settings.Value.ProfilesCollectionName);
     }
     
-    public async Task<Profile?> GetByIdAsync(string id) => await _profilesCollection.Find(p => p.Id == id).FirstOrDefaultAsync();
+    public async Task<Profile?> GetByIdAsync(string id) => 
+        await _profilesCollection.Find(p => p.Id == id).FirstOrDefaultAsync();
     
-    public async Task<long> CountByIdAsync(string id) => await _profilesCollection.CountDocumentsAsync(p => p.Id == id);
+    public async Task<long> CountByIdAsync(string id) => 
+        await _profilesCollection.CountDocumentsAsync(p => p.Id == id);
     
-    public async Task CreateAsync(Profile profile) => await _profilesCollection.InsertOneAsync(profile);
+    public async Task CreateAsync(Profile profile) => 
+        await _profilesCollection.InsertOneAsync(profile);
     
-    public async Task UpdateAsync(Profile profile) => await _profilesCollection.ReplaceOneAsync(p => p.Id == profile.Id, profile);
+    public async Task UpdateAsync(Profile profile) => 
+        await _profilesCollection.ReplaceOneAsync(p => p.Id == profile.Id, profile);
 
-    public async Task DeleteAsync(string id) => await _profilesCollection.DeleteOneAsync(x => x.Id == id);
+    public async Task DeleteAsync(string id) => 
+        await _profilesCollection.DeleteOneAsync(x => x.Id == id);
     
     public async Task<QueryResult<Profile>> GetManyAsync(
         string? name,
@@ -69,4 +74,7 @@ public class ProfilesService : IProfilesService
             Items = profiles
         };
     }
+    
+    public async Task SyncWithAccount(Account account) =>
+        await _profilesCollection.UpdateOneAsync(p => p.Id == account.Id, Builders<Profile>.Update.Set(p => p.Email, account.Email));
 }

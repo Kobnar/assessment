@@ -17,10 +17,12 @@ namespace Assessment.Controllers;
 public class UserAccountController : ControllerBase
 {
     private readonly IAccountsService _accountsService;
+    private readonly IProfilesService _profilesService;
 
-    public UserAccountController(IAccountsService accountsService)
+    public UserAccountController(IAccountsService accountsService, IProfilesService profilesService)
     {
         _accountsService = accountsService;
+        _profilesService = profilesService;
     }
 
     [HttpPost]
@@ -63,6 +65,7 @@ public class UserAccountController : ControllerBase
             return NotFound();
         
         // Enforce uniqueness with username and email
+        bool doProfileSync = false;
         Account? existingAccount;
         if (updatedAccountData.Username is not null)
         {
@@ -74,6 +77,7 @@ public class UserAccountController : ControllerBase
         }
         if (updatedAccountData.Email is not null)
         {
+            doProfileSync = true;
             existingAccount = await _accountsService.GetByEmailAsync(updatedAccountData.Email);
             if (existingAccount is not null)
                 return Conflict();
@@ -81,8 +85,12 @@ public class UserAccountController : ControllerBase
             account.Email = updatedAccountData.Email;
         }
         
-        // Update and refresh record
+        // Update account and profile
         await _accountsService.UpdateAsync(account);
+        if (doProfileSync)
+            await _profilesService.SyncWithAccount(account);
+        
+        // Query updated account
         account = await _accountsService.GetByIdAsync(userId);
         if (account is null)
             return Problem(); // Not sure what to do in this case

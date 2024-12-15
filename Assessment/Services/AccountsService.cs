@@ -26,12 +26,14 @@ public class AccountsService : IAccountsService
     
     public async Task<Account?> GetByIdAsync(string id) => await _accountsCollection.Find(a => a.Id == id).FirstOrDefaultAsync();
     
-    public async Task<Account?> GetByUsernameAsync(string username) => await _accountsCollection.Find(a => a.Username == username).FirstOrDefaultAsync();
+    public async Task<Account?> GetByUsernameAsync(string username) => 
+        await _accountsCollection.Find(a => a.Username.ToLower() == username.ToLower()).FirstOrDefaultAsync();
     
-    public async Task<Account?> GetByEmailAsync(string email) => await _accountsCollection.Find(a => a.Email == email).FirstOrDefaultAsync();
+    public async Task<Account?> GetByEmailAsync(string email) => 
+        await _accountsCollection.Find(a => a.Email.ToLower() == email.ToLower()).FirstOrDefaultAsync();
 
-    // Note: Conflicting usernames and emails are case-insensitive
-    public async Task<long> CountSignUpConflicts(string username, string email) => await _accountsCollection.CountDocumentsAsync(a => a.Username.ToLower() == username.ToLower() || a.Email.ToLower() == email.ToLower());
+    public async Task<long> CountSignUpConflicts(string username, string email) => 
+        await _accountsCollection.CountDocumentsAsync(a => a.Username.ToLower() == username.ToLower() || a.Email.ToLower() == email.ToLower());
     
     public async Task<QueryResult<Account>> GetManyAsync(
         string? username,

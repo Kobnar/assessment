@@ -21,4 +21,6 @@ public interface IProfilesService
         int limit = 100,
         int skip = 0
     );
+
+    Task SyncWithAccount(Account account);
 }

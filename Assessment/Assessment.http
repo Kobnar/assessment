@@ -1,4 +1,4 @@
-@hostname = http://localhost:8080
+@hostname = http://localhost:5286
 
 @username = "kludwig"
 @email = "kludwig@test.com"

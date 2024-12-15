@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using Assessment.Models;
 using Assessment.Services;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Assessment.Tests;
 
@@ -9,11 +10,13 @@ namespace Assessment.Tests;
 public class UserAccountEndpointTests : EndpointTestFixture
 {
     
+    private IAuthenticationService _authenticationService;
     private IAccountsService _accountsService;
     
     [SetUp]
     public void Setup()
     {
+        _authenticationService = GetService<IAuthenticationService>();
         _accountsService = GetService<IAccountsService>();
         DropCollection("Accounts");
     }
@@ -197,5 +200,85 @@ public class UserAccountEndpointTests : EndpointTestFixture
     public async Task ViewAccount_WithManipulatedJwt_ReturnsUnauthorized()
     {
         Assert.Fail("Need to modify flip bit in signature");
+    }
+
+    [Test]
+    public async Task ModifyAccount_WithValidJwt_ReturnsAccount()
+    {
+        string newUsername = "modified_username";
+        string mewEmail = "modified@email.com";
+        
+        // Create existing user
+        Account existingAccount = Account.NewAccount("test_user", "test@email.com", "test_password");
+        await _accountsService.CreateAsync(existingAccount);
+
+        // Compile request
+        string jwt = AuthService.GenerateToken(existingAccount);
+        var body = "{\"username\":\"" + newUsername + "\",\"email\":\"" + mewEmail + "\"}";
+        var request = new HttpRequestMessage(HttpMethod.Patch, "/account");
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt);
+        request.Content = new StringContent(body, Encoding.UTF8, "application/json");;
+
+        // Submit request
+        var response = await Client.SendAsync(request);
+
+        // Assert expectations about response
+        Assert.Multiple(() =>
+        {
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            // TODO: Validate response data
+        });
+        
+        // Query account details
+        Account? accountRecord = await _accountsService.GetByUsernameAsync(newUsername);
+        Assert.That(accountRecord, Is.Not.Null);
+        Assert.That(accountRecord?.Username, Is.EqualTo(newUsername));
+        Assert.That(accountRecord?.Email, Is.EqualTo(mewEmail));
+    }
+
+    [Test]
+    public async Task ModifyAccountEmail_WithValidJwt_ModifiesProfile()
+    {
+        // Need to grab the profiles service for this specific test, because it needs to check if the profile for
+        // an account was updated
+        var profilesService = GetService<IProfilesService>();
+        
+        string oldUsername = "test_user";
+        string newUsername = "modified_username";
+        string mewEmail = "modified@email.com";
+        
+        // Create existing user account and grab its ID
+        Account? account = Account.NewAccount("test_user", "test@email.com", "test_password");
+        await _accountsService.CreateAsync(account);
+        account = await _accountsService.GetByUsernameAsync(oldUsername);
+        if (account is null)
+            Assert.Fail("Failed to create account");
+        
+        // Create existing profile
+        Profile? profile = Profile.NewProfile(
+            "test@email.com",
+            new Name() { First = "John", Last = "Dowe" },
+            "1234567890",
+            new Address() { Line1 = "line1", City = "city", Country = "country", State = "ST", PostalCode = "12345" },
+            account.Id);
+        await profilesService.CreateAsync(profile);
+        profile = await profilesService.GetByIdAsync(account.Id);
+        if (profile is null)
+            Assert.Fail("Failed to create profile");
+
+        // Compile request
+        string jwt = AuthService.GenerateToken(account);
+        var body = "{\"email\":\"" + mewEmail + "\"}";
+        var request = new HttpRequestMessage(HttpMethod.Patch, "/account");
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt);
+        request.Content = new StringContent(body, Encoding.UTF8, "application/json");;
+
+        // Submit request
+        await Client.SendAsync(request);
+
+        // Query profile details
+        Profile? profileRecord = await profilesService.GetByIdAsync(account.Id);
+        Assert.That(profileRecord, Is.Not.Null);
+        Assert.That(profileRecord?.Email, Is.EqualTo(mewEmail));
     }
 }
