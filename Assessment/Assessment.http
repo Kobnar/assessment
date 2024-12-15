@@ -1,4 +1,4 @@
-@hostname = http://localhost:5286
+@hostname = http://localhost:8080
 
 @username = "kludwig"
 @email = "kludwig@test.com"
@@ -103,7 +103,7 @@ Content-Type: application/json
 > {% client.global.set("authToken", response.body.token); %}
 
 ### Admin: Get multiple accounts
-GET {{hostname}}/admin/accounts
+GET {{hostname}}/admin/accounts?limit=3&skip=3
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 

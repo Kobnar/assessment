@@ -13,7 +13,7 @@ public class EndpointTestFixture
     private CustomWebApplicationFactory<Program> _factory;
     private IMongoDatabase _database;
     protected HttpClient Client;
-    protected AuthService AuthService;
+    protected IAuthService AuthService;
     
     protected T GetService<T>() where T : notnull
     {
@@ -43,7 +43,7 @@ public class EndpointTestFixture
         _database = mongoClient.GetDatabase(dbName);
         
         // Extract authentication resource
-        AuthService = GetService<AuthService>();
+        AuthService = GetService<IAuthService>();
     }
 
     [TearDown]

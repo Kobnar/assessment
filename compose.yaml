@@ -9,10 +9,6 @@
       - "8080:8080"
     networks:
       - shared_network
-    environment:
-      # TODO: manage actual secrets
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=secret
     restart: unless-stopped
 
   mongodb:
@@ -22,10 +18,6 @@
       - "27017:27017"
     networks:
       - shared_network
-    environment:
-      # TODO: manage actual secrets
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=secret
     volumes:
       - mongodb_data:/data/db
     restart: unless-stopped

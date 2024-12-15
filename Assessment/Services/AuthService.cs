@@ -9,7 +9,7 @@ using Assessment.Settings;
 
 namespace Assessment.Services;
 
-public class AuthService
+public class AuthService : IAuthService
 {
     
     private readonly AuthSettings _authSettings;

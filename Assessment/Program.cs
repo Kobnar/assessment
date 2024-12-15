@@ -21,12 +21,12 @@ builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
     var settings = serviceProvider.GetRequiredService<IOptions<DatabaseSettings>>().Value;
     return new MongoClient(settings.ConnectionString); // Create the MongoDB client
 });
-builder.Services.AddSingleton<AccountsService>();
-builder.Services.AddSingleton<ProfilesService>();
+builder.Services.AddScoped<IAccountsService, AccountsService>();
+builder.Services.AddScoped<IProfilesService, ProfilesService>();
 
 // Configure JWT Authentication
 builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("Authentication"));
-builder.Services.AddSingleton<AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

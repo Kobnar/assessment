@@ -15,8 +15,8 @@ namespace Assessment.Tests;
 [TestFixture]
 public class AdminAccountsEndpointTests : EndpointTestFixture
 {
-    private AuthService _authService;
-    private AccountsService _accountsService;
+    private IAuthService _authService;
+    private IAccountsService _accountsService;
     private IMongoCollection<Account> _accountsCollection;
     
     [SetUp]
@@ -27,8 +27,8 @@ public class AdminAccountsEndpointTests : EndpointTestFixture
         _accountsCollection = GetCollection<Account>("Accounts");
         
         // Extract authentication resource
-        _authService = GetService<AuthService>();
-        _accountsService = GetService<AccountsService>();
+        _authService = GetService<IAuthService>();
+        _accountsService = GetService<IAccountsService>();
     }
 
     

@@ -16,9 +16,9 @@ namespace Assessment.Controllers;
 [Route("account")]
 public class UserAccountController : ControllerBase
 {
-    private readonly AccountsService _accountsService;
+    private readonly IAccountsService _accountsService;
 
-    public UserAccountController(AccountsService accountsService)
+    public UserAccountController(IAccountsService accountsService)
     {
         _accountsService = accountsService;
     }

@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace Assessment.Services;
 
-public class ProfilesService
+public class ProfilesService : IProfilesService
 {
     private readonly IMongoCollection<Profile> _profilesCollection;
 

@@ -7,12 +7,12 @@ namespace Assessment.Tests;
 [TestFixture]
 public class UserTokenEndpointTests : EndpointTestFixture
 {
-    private AccountsService _accountsService;
+    private IAccountsService _accountsService;
     
     [SetUp]
     public void Setup()
     {
-        _accountsService = GetService<AccountsService>();
+        _accountsService = GetService<IAccountsService>();
         DropCollection("Accounts");
     }
 

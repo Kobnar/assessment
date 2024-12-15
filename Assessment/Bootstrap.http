@@ -1,4 +1,4 @@
-@hostname = http://localhost:5286
+@hostname = http://localhost:8080
 
 ### Sign up Mabel T. Kay
 POST {{hostname}}/account

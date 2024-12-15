@@ -16,9 +16,9 @@ namespace Assessment.Controllers;
 [Route("admin/profiles")]
 public class AdminProfilesController : ControllerBase
 {
-    private readonly ProfilesService _profilesService;
+    private readonly IProfilesService _profilesService;
 
-    public AdminProfilesController(ProfilesService profilesService)
+    public AdminProfilesController(IProfilesService profilesService)
     {
         _profilesService = profilesService;
     }

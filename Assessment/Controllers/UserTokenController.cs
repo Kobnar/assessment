@@ -6,14 +6,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Assessment.Controllers;
 
+/// <summary>
+/// Provides a basic login view which issues a valid JWT.
+/// </summary>
 [ApiController]
 [Route("account/token")]
 public class UserTokenController : ControllerBase
 {
-    private readonly AuthService _authService;
-    private readonly AccountsService _accountsService;
+    private readonly IAuthService _authService;
+    private readonly IAccountsService _accountsService;
 
-    public UserTokenController(AuthService authService, AccountsService accountsService)
+    public UserTokenController(IAuthService authService, IAccountsService accountsService)
     {
         _authService = authService;
         _accountsService = accountsService;
@@ -23,22 +26,22 @@ public class UserTokenController : ControllerBase
     public async Task<IActionResult> LogIn(LogInForm authData)
     {
         // Query the user based on provided username
-        var user = await _accountsService.GetByUsernameAsync(authData.Username);
+        var account = await _accountsService.GetByUsernameAsync(authData.Username);
         
         // User must exist
-        if (user is null)
+        if (account is null)
             return Unauthorized();
         
         // Provided password must be correct
-        if (!user.VerifyPassword(authData.Password))
+        if (!account.VerifyPassword(authData.Password))
             return Unauthorized();
         
         // Update login timestamp
-        user.LastLogin = DateTime.Now;
-        await _accountsService.UpdateAsync(user);
+        account.LastLogin = DateTime.Now;
+        await _accountsService.UpdateAsync(account);
         
         // Generate and return a new JWT
-        var token = _authService.GenerateToken(user);
+        var token = _authService.GenerateToken(account);
         return Ok(new { token = token });
     }
 
