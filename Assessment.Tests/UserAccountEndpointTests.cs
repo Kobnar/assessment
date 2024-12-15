@@ -72,7 +72,7 @@ public class UserAccountEndpointTests : EndpointTestFixture
     public async Task SignUp_WithShortPassword_ReturnsBadRequest()
     {
         // Compile login request
-        var text = "{\"username\":\"test_user\",\"email\":\"test@email.com\",\"password\":\"abcdefghijk\"}";
+        var text = "{\"username\":\"test_user\",\"email\":\"test@email.com\",\"password\":\"short\"}";
         var content = new StringContent(text, Encoding.UTF8, "application/json");
         
         // Submit login request

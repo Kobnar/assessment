@@ -30,7 +30,8 @@ public class AccountsService : IAccountsService
     
     public async Task<Account?> GetByEmailAsync(string email) => await _accountsCollection.Find(a => a.Email == email).FirstOrDefaultAsync();
 
-    public async Task<long> CountSignUpConflicts(string username, string email) => await _accountsCollection.CountDocumentsAsync(a => a.Username == username || a.Email == email);
+    // Note: Conflicting usernames and emails are case-insensitive
+    public async Task<long> CountSignUpConflicts(string username, string email) => await _accountsCollection.CountDocumentsAsync(a => a.Username.ToLower() == username.ToLower() || a.Email.ToLower() == email.ToLower());
     
     public async Task<QueryResult<Account>> GetManyAsync(
         string? username,

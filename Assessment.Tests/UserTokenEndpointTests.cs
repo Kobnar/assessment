@@ -51,7 +51,7 @@ public class UserTokenEndpointTests : EndpointTestFixture
     }
 
     [Test]
-    public async Task LogIn_WithInvalidCredentials_ReturnsUnauthorized()
+    public async Task LogIn_WithInvalidPassword_ReturnsUnauthorized()
     {
         // Create new account
         Account account = Account.NewAccount("test_user", "test@email.com", "test_password");

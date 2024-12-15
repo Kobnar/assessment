@@ -23,7 +23,7 @@ public class UserTokenControllerTests
     }
     
     [Test]
-    public async Task LogIn_WithUnknownUser_ReturnsUnauthorized()
+    public async Task LogIn_WithUnknownUsername_ReturnsUnauthorized()
     {
         // Mock IAccountsService will return null for GetByUsernameAsync
         var result = await _controller.LogIn(new LogInForm() {Username = "test_user", Password = "test_password"});
