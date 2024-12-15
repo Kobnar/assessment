@@ -11,6 +11,6 @@ public class SignUpForm
     [EmailAddress]
     public required string Email { get; set; }
     
-    [MinLength(12)]
+    [MinLength(6)]
     public required string Password { get; set; }
 }

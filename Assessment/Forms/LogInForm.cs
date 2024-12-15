@@ -7,6 +7,6 @@ public class LogInForm
     [MinLength(4)]
     public required string Username { get; set; }
     
-    [MinLength(12)]
+    [MinLength(6)]
     public required string Password { get; set; }
 }
