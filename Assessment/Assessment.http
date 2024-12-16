@@ -1,6 +1,161 @@
-@Assessment_HostAddress = http://localhost:5286
+@hostname = http://localhost:5286
+#@hostname = http://localhost:8080
 
-GET {{Assessment_HostAddress}}/weatherforecast/
-Accept: application/json
+@username = "kludwig"
+@email = "kludwig@test.com"
+@password = "catseatdogstoday"
 
-###
+### User: Sign Up
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": {{username}},
+  "email": {{email}},
+  "password": {{password}}
+}
+
+### User: Login
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": {{username}},
+  "password": {{password}}
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### User: Get account
+GET {{hostname}}/account
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+> {% client.global.set("userId", response.body.id); %}
+
+### User: Update Account
+@newUsername = "konradludwig"
+@newEmail = "konradrkludwig@test.com"
+
+PATCH {{hostname}}/account
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "username": {{newUsername}},
+  "email": {{newEmail}}
+}
+
+### User: Set password
+@newPassword = "dogsarethebestofus"
+
+PUT {{hostname}}/account/password
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "oldPassword": {{password}},
+  "newPassword": {{newPassword}}
+}
+
+### User: Re-authenticate
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": {{newUsername}},
+  "password": {{newPassword}}
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### User: Create profile
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Konrad", "middle": "Roland", "last": "Ludwig"},
+  "phoneNumber": "1234567890",
+  "address": {
+    "line1": "1234 Dogs Dr.",
+    "city": "Dogtown",
+    "state": "MT",
+    "country": "United States",
+    "postalCode": "12345"
+  }
+}
+
+### User: Get profile
+GET {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### User: Update profile
+PATCH {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"middle": "Roland"}
+}
+
+### User: Delete profile
+DELETE {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### User: Delete account
+DELETE {{hostname}}/account
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### DEMO ONLY: Convert to admin
+POST {{hostname}}/account/token/make-admin
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### DEMO ONLY: Re-authenticate
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": {{newUsername}},
+  "password": {{newPassword}}
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Admin: Get multiple accounts
+GET {{hostname}}/admin/accounts?limit=3&skip=3
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### Admin: Get multiple profiles
+GET {{hostname}}/admin/profiles?state=NV
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### Admin: Get account
+GET {{hostname}}/admin/accounts/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### Admin: Get profile
+GET {{hostname}}/admin/profiles/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### Admin: Update profile
+PATCH {{hostname}}/admin/profiles/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "phoneNumber": "+1 (123) 456-7890"
+}
+
+### Admin: Delete profile
+DELETE {{hostname}}/admin/profiles/{{userId}}
+Content-Type: application/json
+Authorization: Bearer {{authToken}}

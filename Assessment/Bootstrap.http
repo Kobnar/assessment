@@ -1,0 +1,610 @@
+@hostname = http://localhost:5286
+#@hostname = http://localhost:8080
+
+### Sign up Mabel T. Kay
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "maykay",
+  "email": "MabelTKay@jourrapide.com",
+  "password": "be0Ao4igh"
+}
+
+### Log in Mabel T. Kay
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "maykay",
+  "password": "be0Ao4igh"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Mabel T. Kay
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Mabel", "middle": "Tarrance", "last": "Kay"},
+  "phoneNumber": "715-365-4411",
+  "address": {
+    "line1": "1330 Abner Road",
+    "city": "Rhinelander",
+    "state": "WI",
+    "country": "United States",
+    "postalCode": "54501"
+  }
+}
+
+### Sign up Alexa D. Morgan
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "alexa_d",
+  "email": "AlexaDMorgan@jourrapide.com",
+  "password": "wE1Oiu4se7"
+}
+
+### Log in Alexa D. Morgan
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "alexa_d",
+  "password": "wE1Oiu4se7"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Alexa D. Morgan
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Alexa", "middle": "Dawn", "last": "Morgan"},
+  "phoneNumber": "615-305-9876",
+  "address": {
+    "line1": "412 Maple Street",
+    "city": "Franklin",
+    "state": "TN",
+    "country": "United States",
+    "postalCode": "37064"
+  }
+}
+
+### Sign up Brian L. Carter
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "blcarter",
+  "email": "BrianLCarter@jourrapide.com",
+  "password": "9YoKwrU2x1"
+}
+
+### Log in Brian L. Carter
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "blcarter",
+  "password": "9YoKwrU2x1"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Brian L. Carter
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Brian", "middle": "Lee", "last": "Carter"},
+  "phoneNumber": "214-506-2410",
+  "address": {
+    "line1": "9022 Spring Valley Road",
+    "city": "Dallas",
+    "state": "TX",
+    "country": "United States",
+    "postalCode": "75240"
+  }
+}
+
+### Sign up Chloe M. Davis
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "cmdavis",
+  "email": "ChloeMDavis@jourrapide.com",
+  "password": "t2RnqwX3kZ"
+}
+
+### Log in Chloe M. Davis
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "cmdavis",
+  "password": "t2RnqwX3kZ"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Chloe M. Davis
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Chloe", "middle": "Marie", "last": "Davis"},
+  "phoneNumber": "310-284-9876",
+  "address": {
+    "line1": "1761 Oakwood Lane",
+    "city": "Los Angeles",
+    "state": "CA",
+    "country": "United States",
+    "postalCode": "90067"
+  }
+}
+
+### Sign up David J. Foster
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "djfoster",
+  "email": "DavidJFoster@jourrapide.com",
+  "password": "a0Lpxn7Ze2"
+}
+
+### Log in David J. Foster
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "djfoster",
+  "password": "a0Lpxn7Ze2"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for David J. Foster
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "David", "middle": "James", "last": "Foster"},
+  "phoneNumber": "503-291-4421",
+  "address": {
+    "line1": "1358 South Main Street",
+    "city": "Portland",
+    "state": "OR",
+    "country": "United States",
+    "postalCode": "97201"
+  }
+}
+
+### Sign up Emma G. Brooks
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "egbrooks",
+  "email": "EmmaGBrooks@jourrapide.com",
+  "password": "q2Tmoy9XnR"
+}
+
+### Log in Emma G. Brooks
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "egbrooks",
+  "password": "q2Tmoy9XnR"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Emma G. Brooks
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Emma", "middle": "Grace", "last": "Brooks"},
+  "phoneNumber": "718-302-3456",
+  "address": {
+    "line1": "482 Bedford Avenue",
+    "city": "Brooklyn",
+    "state": "NY",
+    "country": "United States",
+    "postalCode": "11211"
+  }
+}
+
+### Sign up Frank W. Harris
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "fwharris",
+  "email": "FrankWHarris@jourrapide.com",
+  "password": "r4Wnqo8LmX"
+}
+
+### Log in Frank W. Harris
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "fwharris",
+  "password": "r4Wnqo8LmX"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Frank W. Harris
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Frank", "middle": "William", "last": "Harris"},
+  "phoneNumber": "404-524-4321",
+  "address": {
+    "line1": "112 Peachtree Street",
+    "city": "Atlanta",
+    "state": "GA",
+    "country": "United States",
+    "postalCode": "30303"
+  }
+}
+
+### Sign up Frank W. Harris
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "fwharris",
+  "email": "FrankWHarris@jourrapide.com",
+  "password": "r4Wnqo8LmX"
+}
+
+### Log in Frank W. Harris
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "fwharris",
+  "password": "r4Wnqo8LmX"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Frank W. Harris
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Frank", "middle": "William", "last": "Harris"},
+  "phoneNumber": "404-524-4321",
+  "address": {
+    "line1": "112 Peachtree Street",
+    "city": "Atlanta",
+    "state": "GA",
+    "country": "United States",
+    "postalCode": "30303"
+  }
+}
+
+### Sign up Grace M. Scott
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "gmscott",
+  "email": "GraceMScott@jourrapide.com",
+  "password": "y5Lmqu3XbN"
+}
+
+### Log in Grace M. Scott
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "gmscott",
+  "password": "y5Lmqu3XbN"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Grace M. Scott
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Grace", "middle": "Marie", "last": "Scott"},
+  "phoneNumber": "317-352-7890",
+  "address": {
+    "line1": "2321 Meridian Street",
+    "city": "Indianapolis",
+    "state": "IN",
+    "country": "United States",
+    "postalCode": "46208"
+  }
+}
+
+### Sign up Henry P. Adams
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "hpadams",
+  "email": "HenryPAdams@jourrapide.com",
+  "password": "x3Tnmo4WrP"
+}
+
+### Log in Henry P. Adams
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "hpadams",
+  "password": "x3Tnmo4WrP"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Henry P. Adams
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Henry", "middle": "Paul", "last": "Adams"},
+  "phoneNumber": "702-241-5678",
+  "address": {
+    "line1": "1701 East Sunset Road",
+    "city": "Las Vegas",
+    "state": "NV",
+    "country": "United States",
+    "postalCode": "89119"
+  }
+}
+
+### Sign up Isabelle N. Carter
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "incarter",
+  "email": "IsabelleNCarter@jourrapide.com",
+  "password": "v9Qoex2LtZ"
+}
+
+### Log in Isabelle N. Carter
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "incarter",
+  "password": "v9Qoex2LtZ"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Isabelle N. Carter
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Isabelle", "middle": "Naomi", "last": "Carter"},
+  "phoneNumber": "808-555-1234",
+  "address": {
+    "line1": "920 Ala Moana Boulevard",
+    "city": "Honolulu",
+    "state": "HI",
+    "country": "United States",
+    "postalCode": "96814"
+  }
+}
+
+### Sign up Jacob L. Morgan
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "jlmorgan",
+  "email": "JacobLMorgan@jourrapide.com",
+  "password": "c7Noqx5WpT"
+}
+
+### Log in Jacob L. Morgan
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "jlmorgan",
+  "password": "c7Noqx5WpT"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Jacob L. Morgan
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Jacob", "middle": "Lewis", "last": "Morgan"},
+  "phoneNumber": "412-682-9876",
+  "address": {
+    "line1": "622 Forbes Avenue",
+    "city": "Pittsburgh",
+    "state": "PA",
+    "country": "United States",
+    "postalCode": "15219"
+  }
+}
+
+### Sign up Katherine R. Lee
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "krlee",
+  "email": "KatherineRLee@jourrapide.com",
+  "password": "m6Tpky8NlB"
+}
+
+### Log in Katherine R. Lee
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "krlee",
+  "password": "m6Tpky8NlB"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Katherine R. Lee
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Katherine", "middle": "Rose", "last": "Lee"},
+  "phoneNumber": "503-874-6543",
+  "address": {
+    "line1": "345 State Street",
+    "city": "Salem",
+    "state": "OR",
+    "country": "United States",
+    "postalCode": "97301"
+  }
+}
+
+### Sign up Liam J. Davis
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "ljdavis",
+  "email": "LiamJDavis@jourrapide.com",
+  "password": "b8Rmxl6NtQ"
+}
+
+### Log in Liam J. Davis
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "ljdavis",
+  "password": "b8Rmxl6NtQ"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Liam J. Davis
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Liam", "middle": "James", "last": "Davis"},
+  "phoneNumber": "919-345-7890",
+  "address": {
+    "line1": "1001 Glenwood Avenue",
+    "city": "Raleigh",
+    "state": "NC",
+    "country": "United States",
+    "postalCode": "27605"
+  }
+}
+
+### Sign up Mia E. Johnson
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "mejohnson",
+  "email": "MiaEJohnson@jourrapide.com",
+  "password": "f5Xnqu2YlZ"
+}
+
+### Log in Mia E. Johnson
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "mejohnson",
+  "password": "f5Xnqu2YlZ"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Mia E. Johnson
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Mia", "middle": "Elizabeth", "last": "Johnson"},
+  "phoneNumber": "303-753-4321",
+  "address": {
+    "line1": "3200 Colorado Boulevard",
+    "city": "Denver",
+    "state": "CO",
+    "country": "United States",
+    "postalCode": "80205"
+  }
+}
+
+### Sign up Nathan K. White
+POST {{hostname}}/account
+Content-Type: application/json
+
+{
+  "username": "nkwhite",
+  "email": "NathanKWhite@jourrapide.com",
+  "password": "q3Wpko9ZlR"
+}
+
+### Log in Nathan K. White
+POST {{hostname}}/account/token
+Content-Type: application/json
+
+{
+  "username": "nkwhite",
+  "password": "q3Wpko9ZlR"
+}
+
+> {% client.global.set("authToken", response.body.token); %}
+
+### Create profile for Nathan K. White
+POST {{hostname}}/profile
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "name": {"first": "Nathan", "middle": "Kyle", "last": "White"},
+  "phoneNumber": "210-555-7890",
+  "address": {
+    "line1": "123 Alamo Plaza",
+    "city": "San Antonio",
+    "state": "TX",
+    "country": "United States",
+    "postalCode": "78205"
+  }
+}

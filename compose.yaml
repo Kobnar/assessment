@@ -1,6 +1,30 @@
 ﻿services:
-  assessment:
+  app:
     image: assessment
+    container_name: app
     build:
       context: .
       dockerfile: Assessment/Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - shared_network
+    restart: unless-stopped
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - shared_network
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongodb_data: # Persistent storage on host
+
+networks:
+  shared_network: # Shared network for communication between services
+  

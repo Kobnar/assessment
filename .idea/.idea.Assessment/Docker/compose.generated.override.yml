@@ -1,0 +1,21 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  app:
+    build:
+      context: "/Users/konradludwig/RiderProjects/Assessment"
+      dockerfile: "Assessment/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net9.0/Assessment.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "assessment:dev"
+    ports: []
+    volumes:
+    - "/Users/konradludwig/RiderProjects/Assessment/Assessment:/app:rw"
+    - "/Users/konradludwig/RiderProjects/Assessment:/src:rw"
+    - "/Users/konradludwig/.nuget/packages:/home/app/.nuget/packages"
+    working_dir: "/app"

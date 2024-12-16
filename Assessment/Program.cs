@@ -1,7 +1,61 @@
+using System.Text;
+using System.Text.Json;
+using Assessment.Authentication;
+using Assessment.Models;
+using Assessment.Services;
+using Assessment.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver;
+
 var builder = WebApplication.CreateBuilder(args);
 
+// See: https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/
+// See: https://learn.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app?view=aspnetcore-9.0&tabs=visual-studio
+
+// Configure MongoDB
+builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("Database"));
+builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
+{
+    var settings = serviceProvider.GetRequiredService<IOptions<DatabaseSettings>>().Value;
+    return new MongoClient(settings.ConnectionString); // Create the MongoDB client
+});
+builder.Services.AddScoped<IAccountsService, AccountsService>();
+builder.Services.AddScoped<IProfilesService, ProfilesService>();
+
+// Configure JWT Authentication
+builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("Authentication"));
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidIssuer = builder.Configuration["Authentication:Issuer"],
+            ValidAudience = builder.Configuration["Authentication:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:SecretKey"])),
+            RoleClaimType = "groups",
+        };
+    });
+
+// Add custom access control policy requirements
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminScopePolicy", policy =>
+        policy.Requirements.Add(new ScopeRequirement("admin")));
+});
+
+// Add custom access control policy handlers
+builder.Services.AddSingleton<IAuthorizationHandler, ScopeRequirementHandler>();
+
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddControllers(); // Add support for controllers
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -12,30 +66,10 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
+// app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthentication(); 
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
