@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Assessment.Forms;
+using Assessment.Schema;
 using Assessment.Models;
 using Assessment.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +24,7 @@ public class UserProfileController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProfile(CreateProfileForm newProfileData)
+    public async Task<IActionResult> CreateProfile(CreateProfileRequestSchema newProfileData)
     {
         string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         string? userEmail = User.FindFirstValue(ClaimTypes.Email);
@@ -57,7 +57,7 @@ public class UserProfileController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<ActionResult<Profile>> ModifyProfileDetail(UpdateProfileForm updatedProfileData)
+    public async Task<ActionResult<Profile>> ModifyProfileDetail(UpdateProfileRequestSchema updatedProfileData)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userId is null)
@@ -72,7 +72,7 @@ public class UserProfileController : ControllerBase
         
         if (updatedProfileData.Name is not null)
         {
-            UpdateNameForm nameData = updatedProfileData.Name;
+            UpdateNameRequestSchema nameData = updatedProfileData.Name;
             if (nameData.First is not null)
                 profile.Name.First = nameData.First;
             if (nameData.Middle is not null)
@@ -86,7 +86,7 @@ public class UserProfileController : ControllerBase
 
         if (updatedProfileData.Address is not null)
         {
-            UpdateAddressForm addressData = updatedProfileData.Address;
+            UpdateAddressRequestSchema addressData = updatedProfileData.Address;
             if (addressData.Line1 is not null)
                 profile.Address.Line1 = addressData.Line1;
             if (addressData.Line2 is not null)

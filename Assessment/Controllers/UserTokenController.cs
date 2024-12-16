@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Assessment.Forms;
+using Assessment.Schema;
 using Assessment.Models;
 using Assessment.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +23,7 @@ public class UserTokenController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> LogIn(LogInForm authData)
+    public async Task<IActionResult> LogIn(LogInRequestSchema authData)
     {
         // Query the user based on provided username
         var account = await _accountsService.GetByUsernameAsync(authData.Username);

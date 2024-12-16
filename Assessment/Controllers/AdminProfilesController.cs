@@ -1,5 +1,4 @@
-using System.Security.Claims;
-using Assessment.Forms;
+using Assessment.Schema;
 using Assessment.Models;
 using Assessment.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +23,7 @@ public class AdminProfilesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<QueryResult<Profile>>> GetManyProfiles([FromQuery] QueryProfilesForm queryProfilesForm)
+    public async Task<ActionResult<QueryResult<Profile>>> GetManyProfiles([FromQuery] QueryProfilesRequestSchema queryProfilesForm)
     {
         QueryResult<Profile> profiles = await _profilesService.GetManyAsync(
             queryProfilesForm.Name,
@@ -53,7 +52,7 @@ public class AdminProfilesController : ControllerBase
     }
 
     [HttpPatch("{userId:length(24)}")]
-    public async Task<ActionResult<Profile>> UpdateProfile(string userId, UpdateProfileForm updatedProfileData)
+    public async Task<ActionResult<Profile>> UpdateProfile(string userId, UpdateProfileRequestSchema updatedProfileData)
     {
         var profile = await _profilesService.GetByIdAsync(userId);
         if (profile is null)
@@ -64,7 +63,7 @@ public class AdminProfilesController : ControllerBase
         
         if (updatedProfileData.Name is not null)
         {
-            UpdateNameForm nameData = updatedProfileData.Name;
+            UpdateNameRequestSchema nameData = updatedProfileData.Name;
             if (nameData.First is not null)
                 profile.Name.First = nameData.First;
             if (nameData.Middle is not null)
@@ -78,7 +77,7 @@ public class AdminProfilesController : ControllerBase
 
         if (updatedProfileData.Address is not null)
         {
-            UpdateAddressForm addressData = updatedProfileData.Address;
+            UpdateAddressRequestSchema addressData = updatedProfileData.Address;
             if (addressData.Line1 is not null)
                 profile.Address.Line1 = addressData.Line1;
             if (addressData.Line2 is not null)

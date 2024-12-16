@@ -1,6 +1,5 @@
-using System.Security.Claims;
-using Assessment.Forms;
 using Assessment.Models;
+using Assessment.Schema;
 using Assessment.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +23,7 @@ public class AdminAccountsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<QueryResult<Account>>> GetManyAccounts([FromQuery] QueryAccountsForm queryAccountsForm)
+    public async Task<ActionResult<QueryResult<Account>>> GetManyAccounts([FromQuery] QueryAccountsRequestSchema queryAccountsForm)
     {
         QueryResult<Account> accounts = await _accountsService.GetManyAsync(
             queryAccountsForm.Username,

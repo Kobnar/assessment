@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Assessment.Forms;
+namespace Assessment.Schema;
 
-public class LogInForm
+public class LogInRequestSchema
 {
     [MinLength(4)]
     public required string Username { get; set; }

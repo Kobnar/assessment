@@ -1,5 +1,5 @@
 using System.Security.Claims;
-using Assessment.Forms;
+using Assessment.Schema;
 using Assessment.Models;
 using Assessment.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +27,7 @@ public class UserAccountController : ControllerBase
 
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> SignUp(SignUpForm newAccountData)
+    public async Task<IActionResult> SignUp(SignUpRequestSchema newAccountData)
     {
         long nConflicts = await _accountsService.CountSignUpConflicts(newAccountData.Username, newAccountData.Email);
         if (0 < nConflicts)
@@ -54,7 +54,7 @@ public class UserAccountController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<ActionResult<Account>> ModifyAccountDetail(UpdateUserForm updatedAccountData)
+    public async Task<ActionResult<Account>> ModifyAccountDetail(UpdateUserRequestSchema updatedAccountData)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userId is null)
@@ -99,7 +99,7 @@ public class UserAccountController : ControllerBase
     }
 
     [HttpPut("password")]
-    public async Task<IActionResult> SetPassword(SetPasswordForm setPasswordData)
+    public async Task<IActionResult> SetPassword(SetPasswordRequestSchema setPasswordData)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userId is null)

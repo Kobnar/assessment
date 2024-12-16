@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 using Assessment.Models;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Assessment.Forms;
+namespace Assessment.Schema;
 
-public class CreateProfileForm
+public class CreateProfileRequestSchema
 {
     public required Name Name { get; set; }
     

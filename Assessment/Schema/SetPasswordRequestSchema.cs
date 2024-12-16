@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Assessment.Forms;
+namespace Assessment.Schema;
 
-public class SetPasswordForm
+public class SetPasswordRequestSchema
 {
     public required string OldPassword { get; set; }
     

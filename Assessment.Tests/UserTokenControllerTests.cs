@@ -1,5 +1,5 @@
 using Assessment.Controllers;
-using Assessment.Forms;
+using Assessment.Schema;
 using Assessment.Models;
 using Assessment.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +26,7 @@ public class UserTokenControllerTests
     public async Task LogIn_WithUnknownUsername_ReturnsUnauthorized()
     {
         // Mock IAccountsService will return null for GetByUsernameAsync
-        var result = await _controller.LogIn(new LogInForm() {Username = "test_user", Password = "test_password"});
+        var result = await _controller.LogIn(new LogInRequestSchema() {Username = "test_user", Password = "test_password"});
         
         Assert.That(result, Is.InstanceOf<UnauthorizedResult>());
     }
@@ -42,7 +42,7 @@ public class UserTokenControllerTests
         _mockAccountsService.Setup(service => service.GetByUsernameAsync(username)).ReturnsAsync(account);
         
         // Mock IAccountsService will return null for GetByUsernameAsync
-        var result = await _controller.LogIn(new LogInForm() {Username = username, Password = "invalid_password"});
+        var result = await _controller.LogIn(new LogInRequestSchema() {Username = username, Password = "invalid_password"});
         
         Assert.That(result, Is.InstanceOf<UnauthorizedResult>());
     }
@@ -61,7 +61,7 @@ public class UserTokenControllerTests
         _mockAuthService.Setup(service => service.GenerateToken(account)).Returns(authToken);
         
         DateTime timestamp = DateTime.Now;
-        var result = await _controller.LogIn(new LogInForm() {Username = username, Password = password});
+        var result = await _controller.LogIn(new LogInRequestSchema() {Username = username, Password = password});
         
         // Check response
         Assert.That(result, Is.InstanceOf<OkObjectResult>());

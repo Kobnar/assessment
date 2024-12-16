@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Assessment.Forms;
+namespace Assessment.Schema;
 
-public class QueryProfilesForm
+public class QueryProfilesRequestSchema
 {
     public int Limit { get; set; } = 100;
 

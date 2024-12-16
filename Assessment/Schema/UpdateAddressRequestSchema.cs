@@ -1,6 +1,6 @@
-namespace Assessment.Forms;
+namespace Assessment.Schema;
 
-public class UpdateAddressForm
+public class UpdateAddressRequestSchema
 {
     public string? Line1 { get; set; }
     

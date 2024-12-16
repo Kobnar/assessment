@@ -1,6 +1,6 @@
-namespace Assessment.Forms;
+namespace Assessment.Schema;
 
-public class UpdateNameForm
+public class UpdateNameRequestSchema
 {
     public string? First { get; set; }
 

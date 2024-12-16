@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Assessment.Models;
 
-namespace Assessment.Forms;
+namespace Assessment.Schema;
 
-public class SignUpForm
+public class SignUpRequestSchema
 {
     [MinLength(4)]
     public required string Username { get; set; }

@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Assessment.Forms;
+namespace Assessment.Schema;
 
-public class UpdateUserForm
+public class UpdateUserRequestSchema
 {
     [MinLength(4)]
     public string? Username { get; set; }
