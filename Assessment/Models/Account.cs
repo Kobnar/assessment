@@ -36,10 +36,11 @@ public class Account
     [BsonElement("isAdmin")]
     public bool IsAdmin { get; set; }
 
-    public static Account NewAccount(string username, string email, string password, bool isAdmin = false)
+    public static Account NewAccount(string username, string email, string password, string? userId = null, bool isAdmin = false)
     {
         Account newAccount = new()
         {
+            Id = userId,
             Username = username,
             Email = email,
             Created = DateTime.Now,

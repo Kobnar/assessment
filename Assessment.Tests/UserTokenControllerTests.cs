@@ -8,18 +8,14 @@ using Moq;
 namespace Assessment.Tests;
 
 [TestFixture]
-public class UserTokenControllerTests
+public class UserTokenControllerTests : ControllerTestFixture
 {
-    private Mock<IAuthService> _mockAuthService;
-    private Mock<IAccountsService> _mockAccountsService;
     private UserTokenController _controller;
 
     [SetUp]
-    public void Setup()
+    public new void SetUp()
     {
-        _mockAuthService = new Mock<IAuthService>();
-        _mockAccountsService = new Mock<IAccountsService>();
-        _controller = new UserTokenController(_mockAuthService.Object, _mockAccountsService.Object);
+        _controller = new UserTokenController(MockAuthService.Object, MockAccountsService.Object);
     }
     
     [Test]
@@ -27,8 +23,8 @@ public class UserTokenControllerTests
     {
         // Mock existing user and auth token
         var account = Account.NewAccount("test_user", "test@email.com", "test_password");
-        _mockAccountsService.Setup(service => service.GetByUsernameAsync("test_user")).ReturnsAsync(account);
-        _mockAuthService.Setup(service => service.GenerateToken(account)).Returns("test_auth_token");
+        MockAccountsService.Setup(service => service.GetByUsernameAsync("test_user")).ReturnsAsync(account);
+        MockAuthService.Setup(service => service.GenerateToken(account)).Returns("test_auth_token");
         
         // Call view method
         var timestamp = DateTime.Now;
@@ -57,7 +53,7 @@ public class UserTokenControllerTests
     {
         // Mock existing user
         var account = Account.NewAccount("test_user", "test@email.com", "test_password");
-        _mockAccountsService.Setup(service => service.GetByUsernameAsync("test_user")).ReturnsAsync(account);
+        MockAccountsService.Setup(service => service.GetByUsernameAsync("test_user")).ReturnsAsync(account);
         
         // Call view method
         var result = await _controller.LogIn(new LogInRequestSchema() {Username = "test_user", Password = "invalid_password"});

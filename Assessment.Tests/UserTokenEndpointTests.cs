@@ -11,24 +11,12 @@ namespace Assessment.Tests;
 [TestFixture]
 public class UserTokenEndpointTests : EndpointTestFixture
 {
-    private JsonSerializerOptions _options;
     private IAuthService _authService;
     private IAccountsService _accountsService;
-
-    private string Serialize(object obj)
-    {
-        return JsonSerializer.Serialize(obj, _options);
-    }
-
-    private T? Deserialize<T>(string json)
-    {
-        return JsonSerializer.Deserialize<T>(json, _options);
-    }
     
     [SetUp]
-    public void SetUp()
+    public new void SetUp()
     {
-        _options = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         _authService = GetService<IAuthService>();
         _accountsService = GetService<IAccountsService>();
         DropCollection("Accounts");
@@ -43,11 +31,11 @@ public class UserTokenEndpointTests : EndpointTestFixture
         
         // Compile login request
         var requestBody = Serialize(new LogInRequestSchema() {Username = "test_user", Password = "test_password"});
-        var content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+        var requestContent = new StringContent(requestBody, Encoding.UTF8, "application/json");
         
         // Submit login request
         var timestamp = DateTime.Now;
-        var response = await Client.PostAsync("/account/token", content);
+        var response = await Client.PostAsync("/account/token", requestContent);
         Assert.That(response.StatusCode, Is.EqualTo(System.Net.HttpStatusCode.OK));
         
         // Deserialize JWT

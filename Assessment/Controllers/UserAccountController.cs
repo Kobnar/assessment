@@ -36,11 +36,11 @@ public class UserAccountController : ControllerBase
         var newAccount = Account.NewAccount(newAccountData.Username, newAccountData.Email, newAccountData.Password);
         await _accountsService.CreateAsync(newAccount);
 
-        return CreatedAtAction(nameof(ViewAccountDetail), new { userId = newAccount.Id }, newAccount);
+        return CreatedAtAction(nameof(ViewAccount), new { userId = newAccount.Id }, newAccount);
     }
 
     [HttpGet]
-    public async Task<ActionResult<Account>> ViewAccountDetail()
+    public async Task<ActionResult<Account>> ViewAccount()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userId is null)
@@ -54,7 +54,7 @@ public class UserAccountController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<ActionResult<Account>> ModifyAccountDetail(UpdateUserRequestSchema updatedAccountData)
+    public async Task<ActionResult<Account>> ModifyAccount(UpdateUserRequestSchema updatedAccountData)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         if (userId is null)
@@ -89,11 +89,6 @@ public class UserAccountController : ControllerBase
         await _accountsService.UpdateAsync(account);
         if (doProfileSync)
             await _profilesService.SyncWithAccount(account);
-        
-        // Query updated account
-        account = await _accountsService.GetByIdAsync(userId);
-        if (account is null)
-            return Problem(); // Not sure what to do in this case
 
         return account;
     }

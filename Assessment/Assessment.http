@@ -111,7 +111,7 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 ### DEMO ONLY: Convert to admin
-POST {{hostname}}/account/token/makeadmin
+POST {{hostname}}/account/token/make-admin
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 

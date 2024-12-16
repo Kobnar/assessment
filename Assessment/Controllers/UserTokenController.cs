@@ -50,7 +50,7 @@ public class UserTokenController : ControllerBase
     /// kind of command line interface to create an admin user. This is just for demonstration.
     /// </summary>
     /// <returns></returns>
-    [HttpPost("makeadmin")]
+    [HttpPost("make-admin")]
     public async Task<IActionResult> MakeAdmin()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

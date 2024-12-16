@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text;
 using Assessment.Models;
+using Assessment.Schema;
 using Assessment.Services;
 using Microsoft.AspNetCore.Authentication;
 
@@ -14,7 +15,7 @@ public class UserAccountEndpointTests : EndpointTestFixture
     private IAccountsService _accountsService;
     
     [SetUp]
-    public void Setup()
+    public new void SetUp()
     {
         _authenticationService = GetService<IAuthenticationService>();
         _accountsService = GetService<IAccountsService>();
@@ -22,15 +23,16 @@ public class UserAccountEndpointTests : EndpointTestFixture
     }
 
     [Test]
-    public async Task SignUp_WithValidCredentials_CreatesUserAccount()
+    public async Task SignUp_WithValidCredentials_ReturnsCreated()
     {
         // Compile login request
-        var text = "{\"username\":\"test_user\",\"email\":\"test@email.com\",\"password\":\"test_password\"}";
-        var content = new StringContent(text, Encoding.UTF8, "application/json");
+        var requestBody = Serialize(new SignUpRequestSchema()
+            { Username = "test_user", Email = "test@email.com", Password = "test_password" });
+        var requestContent = new StringContent(requestBody, Encoding.UTF8, "application/json");
         
         // Submit login request
         var timestamp = DateTime.Now;
-        var response = await Client.PostAsync("/account", content);
+        var response = await Client.PostAsync("/account", requestContent);
 
         // Assert expectations about response
         Assert.Multiple(() =>
@@ -191,19 +193,7 @@ public class UserAccountEndpointTests : EndpointTestFixture
     }
 
     [Test]
-    public async Task ViewAccount_WithExpiredJwt_ReturnsUnauthorized()
-    {
-        Assert.Fail("Need to figure out how to change exp claim");
-    }
-
-    [Test]
-    public async Task ViewAccount_WithManipulatedJwt_ReturnsUnauthorized()
-    {
-        Assert.Fail("Need to modify flip bit in signature");
-    }
-
-    [Test]
-    public async Task ModifyAccount_WithValidJwt_ReturnsAccount()
+    public async Task ModifyAccount_WithValidJwt_ReturnsOk()
     {
         string newUsername = "modified_username";
         string mewEmail = "modified@email.com";
@@ -237,7 +227,7 @@ public class UserAccountEndpointTests : EndpointTestFixture
     }
 
     [Test]
-    public async Task ModifyAccountEmail_WithValidJwt_ModifiesProfile()
+    public async Task ModifyAccount_WithNewEmail_UpdatesProfile()
     {
         // Need to grab the profiles service for this specific test, because it needs to check if the profile for
         // an account was updated

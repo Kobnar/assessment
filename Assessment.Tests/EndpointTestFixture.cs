@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Assessment.Services;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
@@ -10,6 +11,7 @@ namespace Assessment.Tests;
 /// </summary>
 public class EndpointTestFixture
 {
+    private JsonSerializerOptions _jsonOptions;
     private CustomWebApplicationFactory<Program> _factory;
     private IMongoDatabase _database;
     protected HttpClient Client;
@@ -20,18 +22,28 @@ public class EndpointTestFixture
         return _factory.GetService<T>();
     }
 
-    protected void DropCollection(string name)
+    protected string Serialize(object obj)
     {
-        _database.DropCollection(name);
+        return JsonSerializer.Serialize(obj, _jsonOptions);
+    }
+
+    protected T? Deserialize<T>(string json)
+    {
+        return JsonSerializer.Deserialize<T>(json, _jsonOptions);
     }
 
     protected IMongoCollection<T> GetCollection<T>(string name)
     {
         return _database.GetCollection<T>(name);
     }
+
+    protected void DropCollection(string name)
+    {
+        _database.DropCollection(name);
+    }
     
     [SetUp]
-    public void Setup()
+    public void SetUp()
     {
         // Create the web app factory and client
         _factory = new CustomWebApplicationFactory<Program>();
@@ -41,6 +53,9 @@ public class EndpointTestFixture
         var dbName = _factory.GetConfiguration()["Database:DatabaseName"];
         var mongoClient = _factory.Services.GetRequiredService<IMongoClient>();
         _database = mongoClient.GetDatabase(dbName);
+        
+        // Configure JSON serialization/deserialization
+        _jsonOptions = new JsonSerializerOptions() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
         
         // Extract authentication resource
         AuthService = GetService<IAuthService>();
