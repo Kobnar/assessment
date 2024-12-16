@@ -38,7 +38,7 @@ public class AdminAccountsController : ControllerBase
     }
 
     [HttpGet("{userId:length(24)}")]
-    public async Task<ActionResult<Account>> GetAccountDetail(string userId)
+    public async Task<ActionResult<Account>> GetAccount(string userId)
     {
         var account = await _accountsService.GetByIdAsync(userId);
         if (account is null)
