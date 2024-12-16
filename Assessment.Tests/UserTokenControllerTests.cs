@@ -10,9 +10,9 @@ namespace Assessment.Tests;
 [TestFixture]
 public class UserTokenControllerTests
 {
-    Mock<IAuthService> _mockAuthService;
-    Mock<IAccountsService> _mockAccountsService;
-    UserTokenController _controller;
+    private Mock<IAuthService> _mockAuthService;
+    private Mock<IAccountsService> _mockAccountsService;
+    private UserTokenController _controller;
 
     [SetUp]
     public void Setup()
@@ -23,9 +23,30 @@ public class UserTokenControllerTests
     }
     
     [Test]
+    public async Task LogIn_WithValidCredentials_ReturnsOk()
+    {
+        // Mock existing user and auth token
+        var account = Account.NewAccount("test_user", "test@email.com", "test_password");
+        _mockAccountsService.Setup(service => service.GetByUsernameAsync("test_user")).ReturnsAsync(account);
+        _mockAuthService.Setup(service => service.GenerateToken(account)).Returns("test_auth_token");
+        
+        // Call view method
+        var timestamp = DateTime.Now;
+        var result = await _controller.LogIn(new LogInRequestSchema() {Username = "test_user", Password = "test_password"});
+        Assert.That(result, Is.InstanceOf<OkObjectResult>());
+        
+        // Validate response
+        var resultContent = (result as OkObjectResult)?.Value as LogInResponseSchema;
+        Assert.That(resultContent?.Token, Is.EqualTo("test_auth_token"));
+        
+        // Verify side effects
+        Assert.That(account.LastLogin > timestamp);
+    }
+    
+    [Test]
     public async Task LogIn_WithUnknownUsername_ReturnsUnauthorized()
     {
-        // Mock IAccountsService will return null for GetByUsernameAsync
+        // Call view method
         var result = await _controller.LogIn(new LogInRequestSchema() {Username = "test_user", Password = "test_password"});
         
         Assert.That(result, Is.InstanceOf<UnauthorizedResult>());
@@ -34,40 +55,13 @@ public class UserTokenControllerTests
     [Test]
     public async Task LogIn_WithInvalidPassword_ReturnsUnauthorized()
     {
-        string username = "test_user";
-        string email = "test@email.com";
-        string password = "test_password";
-        Account account = Account.NewAccount(username, email, password);
+        // Mock existing user
+        var account = Account.NewAccount("test_user", "test@email.com", "test_password");
+        _mockAccountsService.Setup(service => service.GetByUsernameAsync("test_user")).ReturnsAsync(account);
         
-        _mockAccountsService.Setup(service => service.GetByUsernameAsync(username)).ReturnsAsync(account);
-        
-        // Mock IAccountsService will return null for GetByUsernameAsync
-        var result = await _controller.LogIn(new LogInRequestSchema() {Username = username, Password = "invalid_password"});
+        // Call view method
+        var result = await _controller.LogIn(new LogInRequestSchema() {Username = "test_user", Password = "invalid_password"});
         
         Assert.That(result, Is.InstanceOf<UnauthorizedResult>());
-    }
-    
-    [Test]
-    public async Task LogIn_WithValidCredentials_ReturnsOk()
-    {
-        string username = "test_user";
-        string email = "test@email.com";
-        string password = "test_password";
-        string authToken = "test_auth_token";
-        Account account = Account.NewAccount(username, email, password);
-        
-        // Set up mocked side effects
-        _mockAccountsService.Setup(service => service.GetByUsernameAsync(username)).ReturnsAsync(account);
-        _mockAuthService.Setup(service => service.GenerateToken(account)).Returns(authToken);
-        
-        DateTime timestamp = DateTime.Now;
-        var result = await _controller.LogIn(new LogInRequestSchema() {Username = username, Password = password});
-        
-        // Check response
-        Assert.That(result, Is.InstanceOf<OkObjectResult>());
-        // TODO: Assert valid token in response
-        
-        // Check side effects
-        Assert.That(account.LastLogin > timestamp);
     }
 }

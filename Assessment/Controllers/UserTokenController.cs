@@ -42,7 +42,7 @@ public class UserTokenController : ControllerBase
         
         // Generate and return a new JWT
         var token = _authService.GenerateToken(account);
-        return Ok(new { token = token });
+        return Ok(new LogInResponseSchema() {Token = token});
     }
 
     /// <summary>
